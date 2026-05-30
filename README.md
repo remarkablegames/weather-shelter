@@ -4,14 +4,14 @@
 
 # Phaser Template
 
-[![release](https://img.shields.io/github/v/release/remarkablegames/phaser-template)](https://github.com/remarkablegames/phaser-template/releases)
-[![build](https://github.com/remarkablegames/phaser-template/actions/workflows/build.yml/badge.svg)](https://github.com/remarkablegames/phaser-template/actions/workflows/build.yml)
+[![release](https://img.shields.io/github/v/release/remarkablegames/weather-shelter)](https://github.com/remarkablegames/weather-shelter/releases)
+[![build](https://github.com/remarkablegames/weather-shelter/actions/workflows/build.yml/badge.svg)](https://github.com/remarkablegames/weather-shelter/actions/workflows/build.yml)
 
-<kbd>phaser-template</kbd> is a template for making [Phaser](https://phaser.io/) games. The template is inspired by the tutorial "[Making your first Phaser 3 game](https://phaser.io/tutorials/making-your-first-phaser-3-game)".
+<kbd>weather-shelter</kbd> is a template for making [Phaser](https://phaser.io/) games. The template is inspired by the tutorial "[Making your first Phaser 3 game](https://phaser.io/tutorials/making-your-first-phaser-3-game)".
 
 Play the game on:
 
-- [remarkablegames](https://remarkablegames.org/phaser-template/)
+- [remarkablegames](https://remarkablegames.org/weather-shelter/)
 
 ## Prerequisites
 
@@ -26,8 +26,8 @@ brew install nvm
 Clone the repository:
 
 ```sh
-git clone https://github.com/remarkablegames/phaser-template.git
-cd phaser-template
+git clone https://github.com/remarkablegames/weather-shelter.git
+cd weather-shelter
 ```
 
 Install the dependencies:
@@ -39,7 +39,7 @@ npm install
 Rename the project:
 
 ```sh
-git grep -l phaser-template | xargs sed -i '' -e 's/phaser-template/my-game/g'
+git grep -l weather-shelter | xargs sed -i '' -e 's/weather-shelter/my-game/g'
 ```
 
 ```sh

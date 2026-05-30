@@ -1,5 +1,5 @@
 {
-  "name": "phaser-template",
+  "name": "weather-shelter",
   "version": "1.0.0-alpha",
   "description": "A template for building Phaser games.",
   "author": "Mark <mark@remarkablemark.org>",
@@ -14,7 +14,7 @@
     "preview": "vite preview",
     "start": "vite --open"
   },
-  "homepage": "https://remarkablegames.org/phaser-template/",
+  "homepage": "https://remarkablegames.org/weather-shelter/",
   "dependencies": {
     "phaser": "3.90.0",
     "phaser-jsx": "0.16.2"
