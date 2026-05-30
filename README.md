@@ -1,13 +1,13 @@
 <p align="center">
-  <img src="public/logo192.png" alt="Phaser Template">
+  <img src="public/logo192.png" alt="Weather Shelter">
 </p>
 
-# Phaser Template
+# Weather Shelter
 
 [![release](https://img.shields.io/github/v/release/remarkablegames/weather-shelter)](https://github.com/remarkablegames/weather-shelter/releases)
 [![build](https://github.com/remarkablegames/weather-shelter/actions/workflows/build.yml/badge.svg)](https://github.com/remarkablegames/weather-shelter/actions/workflows/build.yml)
 
-<kbd>weather-shelter</kbd> is a template for making [Phaser](https://phaser.io/) games. The template is inspired by the tutorial "[Making your first Phaser 3 game](https://phaser.io/tutorials/making-your-first-phaser-3-game)".
+☂️ Build shelters before the storm arrives. Can your creations weather the storm?
 
 Play the game on:
 
@@ -34,16 +34,6 @@ Install the dependencies:
 
 ```sh
 npm install
-```
-
-Rename the project:
-
-```sh
-git grep -l weather-shelter | xargs sed -i '' -e 's/weather-shelter/my-game/g'
-```
-
-```sh
-git grep -l 'Phaser Template' | xargs sed -i '' -e 's/Phaser Template/My Game/g'
 ```
 
 Update the files:
