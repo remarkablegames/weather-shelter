@@ -13,6 +13,11 @@ Play the game on:
 
 - [remarkablegames](https://remarkablegames.org/weather-shelter/)
 
+## Credits
+
+- [Sunny Land](https://ansimuz.itch.io/sunny-land-pixel-game-art) by [ansimuz](https://ansimuz.itch.io/)
+- [Free Swamp 2D Tileset Pixel Art](https://free-game-assets.itch.io/free-swamp-2d-tileset-pixel-art) by [Free Game Assets](https://free-game-assets.itch.io/)
+
 ## Prerequisites
 
 [nvm](https://github.com/nvm-sh/nvm#installing-and-updating):
