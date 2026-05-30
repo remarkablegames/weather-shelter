@@ -1,2 +1,3 @@
-export * from './Player';
-export * from './Star';
+export * from './Block';
+export * from './Creature';
+export * from './Weather';
