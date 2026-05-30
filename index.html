@@ -18,28 +18,6 @@
     <link rel="manifest" href="/manifest.json" />
     <link rel="stylesheet" href="/src/style.css" />
 
-    <% if (process.env.BUNDLE !== 'true') { %>
-    <!--
-      GitHub Corners. See https://github.com/remarkablemark/github-corners
-    -->
-    <script
-      src="https://unpkg.com/github-corners/dist/embed.min.js"
-      data-href="https://github.com/remarkablegames/weather-shelter"
-      data-target="_blank"
-      async
-      defer
-    ></script>
-    <style>
-      .github-corner > svg {
-        opacity: 0.5;
-        transition: opacity 0.4s;
-      }
-      .github-corner:hover > svg {
-        opacity: 1;
-      }
-    </style>
-    <% } %>
-
     <title>Weather Shelter | remarkablegames</title>
   </head>
   <body>
