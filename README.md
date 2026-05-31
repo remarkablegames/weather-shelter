@@ -24,6 +24,10 @@ Play the game on:
 
 - [mexican mountain twilight](https://www.subsocials.com/stuff/mexican-mountain-twilight)
 - [Thunder Sound](https://pixabay.com/sound-effects/nature-thunder-sound-375727/) by [SoundReality](https://pixabay.com/users/soundreality-31074404/)
+- [Fist Punch or kick](https://pixabay.com/sound-effects/fist-punch-or-kick-7171/) by [rcroller](https://pixabay.com/users/freesound_community-46691455/)
+- [Mouse click](https://pixabay.com/sound-effects/mouse-click-290204/) by [MatthewVakaliuk73627](https://pixabay.com/users/matthewvakaliuk73627-48347364/)
+- [Pop](https://pixabay.com/sound-effects/pop-423717/) by [SoundReality](https://pixabay.com/users/soundreality-31074404/)
+- [click button](https://pixabay.com/sound-effects/click-button-131479/) by [666HeroHero](https://pixabay.com/users/666herohero-25759907/)
 
 ## Prerequisites
 
