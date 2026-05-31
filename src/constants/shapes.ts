@@ -193,14 +193,14 @@ export const BLOCK_SHAPES: Record<string, VertexPoint[] | null> = {
     { x: -18, y: -8 },
   ],
 
-  // Ridge5 (81×29): wide flat log
+  // Ridge5 (81×29): wide log sloping upward left-to-right
   Ridge5: [
-    { x: -40, y: -4 },
-    { x: -28, y: -14 },
-    { x: 28, y: -14 },
-    { x: 40, y: -4 },
-    { x: 40, y: 12 },
-    { x: -40, y: 12 },
+    { x: -40, y: 4 },
+    { x: -10, y: -14 },
+    { x: 10, y: -6 },
+    { x: 40, y: -14 },
+    { x: 40, y: 14 },
+    { x: -40, y: 14 },
   ],
 
   // Ridge6 (47×55): tall narrow stump
