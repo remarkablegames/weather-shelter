@@ -1,4 +1,4 @@
-import { Text, useState } from 'phaser-jsx';
+import { Text, useEffect, useState } from 'phaser-jsx';
 import type { Dispatch, SetStateAction } from 'react';
 
 const FONT = '"Lucida Grande", Helvetica, Arial, sans-serif';
@@ -7,12 +7,18 @@ export type SetTimer = Dispatch<SetStateAction<number>>;
 export type SetSurvivors = Dispatch<SetStateAction<string>>;
 
 interface HUDProps {
+  initialHint?: string;
   onReady: (setTimer: SetTimer, setSurvivors: SetSurvivors) => void;
 }
 
-export function HUD({ onReady }: HUDProps) {
+export function HUD({ initialHint = '', onReady }: HUDProps) {
   const [timer, setTimer] = useState(-1);
   const [survivors, setSurvivors] = useState('');
+  const [hint, setHint] = useState(initialHint);
+
+  useEffect(() => {
+    setHint(initialHint);
+  }, [initialHint]);
 
   onReady(setTimer, setSurvivors);
 
@@ -35,7 +41,8 @@ export function HUD({ onReady }: HUDProps) {
           depth={14}
         />
       )}
-      {survivors !== '' && (
+
+      {survivors && (
         <Text
           x={16}
           y={16}
@@ -45,6 +52,22 @@ export function HUD({ onReady }: HUDProps) {
             fontFamily: FONT,
             fontSize: 22,
             color: '#ffffff',
+            stroke: '#000000',
+            strokeThickness: 3,
+          }}
+        />
+      )}
+
+      {hint && (
+        <Text
+          x={16}
+          y={50}
+          text={hint}
+          depth={14}
+          style={{
+            fontFamily: FONT,
+            fontSize: 18,
+            color: '#ffffaa',
             stroke: '#000000',
             strokeThickness: 3,
           }}

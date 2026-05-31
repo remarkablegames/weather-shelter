@@ -131,7 +131,7 @@ This is the core scene with two sub-phases:
 - Spawn animals at fixed positions (per level config)
 - Spawn `blockCount` blocks randomly along the ground (x range 200–1100); player drags them to build shelter
 - Show HUD timer (if not tutorial)
-- "Launch Storm" button (or timer auto-triggers)
+- "Start Storm" button (or timer auto-triggers)
 
 **Storm phase:**
 

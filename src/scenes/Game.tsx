@@ -19,6 +19,8 @@ const BLOCK_SPAWN_X_MIN = 200;
 const BLOCK_SPAWN_X_MAX = 1100;
 const DEBRIS_INTERVAL_MS = 3000;
 const WIND_STREAK_COUNT = 12;
+const LAUNCH_BUTTON_WIDTH = 140;
+const LAUNCH_BUTTON_RIGHT_OFFSET = 160;
 
 type Phase = 'build' | 'storm';
 
@@ -130,9 +132,20 @@ export class Game extends Phaser.Scene {
     this.launchButton = this.add.graphics();
     this.launchButton.setDepth(12);
     this.launchButton.fillStyle(0xaa2200, 1);
-    this.launchButton.fillRoundedRect(width - 210, 20, 190, 50, 8);
+    this.launchButton.fillRoundedRect(
+      width - LAUNCH_BUTTON_RIGHT_OFFSET,
+      20,
+      LAUNCH_BUTTON_WIDTH,
+      50,
+      8,
+    );
     this.launchButton.setInteractive(
-      new Phaser.Geom.Rectangle(width - 210, 20, 190, 50),
+      new Phaser.Geom.Rectangle(
+        width - LAUNCH_BUTTON_RIGHT_OFFSET,
+        20,
+        LAUNCH_BUTTON_WIDTH,
+        50,
+      ),
       (rect: Phaser.Geom.Rectangle, x: number, y: number) =>
         Phaser.Geom.Rectangle.Contains(rect, x, y),
     );
@@ -143,13 +156,18 @@ export class Game extends Phaser.Scene {
     });
 
     this.launchText = this.add
-      .text(width - 115, 45, 'Launch Storm', {
-        fontFamily: '"Lucida Grande", Helvetica, Arial, sans-serif',
-        fontSize: 18,
-        color: '#ffffff',
-        stroke: '#000000',
-        strokeThickness: 3,
-      })
+      .text(
+        width - LAUNCH_BUTTON_RIGHT_OFFSET + LAUNCH_BUTTON_WIDTH / 2,
+        45,
+        'Start Storm',
+        {
+          fontFamily: '"Lucida Grande", Helvetica, Arial, sans-serif',
+          fontSize: 18,
+          color: '#ffffff',
+          stroke: '#000000',
+          strokeThickness: 3,
+        },
+      )
       .setOrigin(0.5)
       .setDepth(13);
   }
@@ -173,6 +191,7 @@ export class Game extends Phaser.Scene {
   private createHUD() {
     render(
       <HUD
+        initialHint={this.config.hint ?? ''}
         onReady={(setTimer: SetTimer, setSurvivors: SetSurvivors) => {
           this.setTimer = setTimer;
           this.setSurvivors = setSurvivors;
@@ -338,7 +357,7 @@ export class Game extends Phaser.Scene {
   private updateSurvivorsHUD() {
     const alive = this.animals.filter((animal) => !animal.isDead).length;
     const total = this.animals.length;
-    this.setSurvivors(`🐾 ${String(alive)} / ${String(total)}`);
+    this.setSurvivors(`❤️ ${String(alive)} / ${String(total)}`);
   }
 
   private endStorm() {

@@ -20,4 +20,5 @@ export interface LevelConfig {
   animals: AnimalConfig[];
   blocks: Texture[];
   weather: WeatherConfig;
+  hint?: string;
 }

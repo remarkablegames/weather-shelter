@@ -19,6 +19,7 @@ export const LEVELS: LevelConfig[] = [
       hasDebris: false,
       stormDurationMs: 12000,
     },
+    hint: 'Drag boxes to protect the frog from the rain!',
   },
 
   {
@@ -45,6 +46,7 @@ export const LEVELS: LevelConfig[] = [
       hasDebris: false,
       stormDurationMs: 12000,
     },
+    hint: 'Wind is picking up! Build sturdy shelters.',
   },
 
   {
@@ -75,5 +77,6 @@ export const LEVELS: LevelConfig[] = [
       hasDebris: true,
       stormDurationMs: 12000,
     },
+    hint: 'Watch out for flying debris! Use heavy stones.',
   },
 ];
