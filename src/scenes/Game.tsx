@@ -414,7 +414,7 @@ export class Game extends Phaser.Scene {
     this.stormBar = undefined;
     this.stormBarLabel?.destroy();
     this.stormBarLabel = undefined;
-    fadeOutSound(this, this.rainMusic, 1500);
+    fadeOutSound(this, this.rainMusic, 1000);
     this.animals.forEach((animal) => {
       animal.isStorming = false;
     });
@@ -422,7 +422,7 @@ export class Game extends Phaser.Scene {
     const survived = this.animals.filter((animal) => !animal.isDead).length;
     const total = this.animals.length;
 
-    this.time.delayedCall(1500, () => {
+    this.time.delayedCall(1000, () => {
       this.scene.start(Scene.Result, {
         survived,
         total,
