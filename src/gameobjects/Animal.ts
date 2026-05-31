@@ -3,7 +3,7 @@ import Phaser from 'phaser';
 import { AudioKey, Texture } from '../constants';
 
 enum Animation {
-  OpossumIdle = 'OpossumIdle',
+  OpossumMove = 'OpossumMove',
   EagleIdle = 'EagleIdle',
   FoxIdle = 'FoxIdle',
   FrogIdle = 'FrogIdle',
@@ -45,7 +45,7 @@ export class Animal extends Phaser.Physics.Matter.Sprite {
     this.setScale(scale);
     this.barOffsetY = -(spriteHeight * scale) / 2 - BAR_GAP;
     this.startX = x;
-    this.canMove = type === Texture.OpossumIdle;
+    this.canMove = type === Texture.Opossum;
     if (this.canMove) {
       this.setFlipX(true);
       this.setFixedRotation();
@@ -69,10 +69,10 @@ export class Animal extends Phaser.Physics.Matter.Sprite {
   private createAnimations() {
     const anims = this.scene.anims;
 
-    if (!anims.exists(Animation.OpossumIdle)) {
+    if (!anims.exists(Animation.OpossumMove)) {
       anims.create({
-        key: Animation.OpossumIdle,
-        frames: anims.generateFrameNumbers(Texture.OpossumIdle, {
+        key: Animation.OpossumMove,
+        frames: anims.generateFrameNumbers(Texture.Opossum, {
           start: 0,
           end: 5,
         }),
@@ -144,8 +144,8 @@ export class Animal extends Phaser.Physics.Matter.Sprite {
         this.setRectangle(75, 60);
         (this.body as MatterJS.BodyType).label = 'animal';
         break;
-      case Texture.OpossumIdle:
-        this.play(Animation.OpossumIdle);
+      case Texture.Opossum:
+        this.play(Animation.OpossumMove);
         this.setRectangle(70, 50);
         (this.body as MatterJS.BodyType).label = 'animal';
         break;

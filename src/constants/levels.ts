@@ -85,7 +85,7 @@ export const LEVELS: LevelConfig[] = [
     timerSeconds: 30,
     animals: [
       { x: 420, type: Texture.FrogSprite, width: 17, height: 20 },
-      { x: 860, type: Texture.OpossumIdle, width: 32, height: 24 },
+      { x: 860, type: Texture.Opossum, width: 32, height: 24 },
     ],
     blocks: [
       Texture.Box3,

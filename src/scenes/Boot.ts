@@ -14,7 +14,7 @@ import foxIdle2 from '/sprites/sunnyland/characters/fox/sprites/idle/player-idle
 import foxIdle3 from '/sprites/sunnyland/characters/fox/sprites/idle/player-idle-3.png';
 import foxIdle4 from '/sprites/sunnyland/characters/fox/sprites/idle/player-idle-4.png';
 import frogIdle from '/sprites/sunnyland/characters/frog/spritesheets/frog-idle.png';
-import opossumIdle from '/sprites/sunnyland/characters/opossum/spritesheet.png';
+import opossum from '/sprites/sunnyland/characters/opossum/spritesheet.png';
 import enemyDeath from '/sprites/sunnyland/misc/fx/spritesheets/enemy-death.png';
 import swampBg1 from '/sprites/swamp/background/layers/1.png';
 import swampBg2 from '/sprites/swamp/background/layers/2.png';
@@ -84,7 +84,7 @@ export class Boot extends Phaser.Scene {
       frameWidth: 35,
       frameHeight: 21,
     });
-    this.load.spritesheet(Texture.OpossumIdle, opossumIdle, {
+    this.load.spritesheet(Texture.Opossum, opossum, {
       frameWidth: 36,
       frameHeight: 28,
     });

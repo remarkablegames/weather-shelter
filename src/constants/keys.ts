@@ -48,7 +48,7 @@ export enum Texture {
   Ridge6 = 'Ridge6',
 
   FrogSprite = 'FrogSprite',
-  OpossumIdle = 'OpossumIdle',
+  Opossum = 'Opossum',
   EagleAttack = 'EagleAttack',
   FoxIdle1 = 'FoxIdle1',
   FoxIdle2 = 'FoxIdle2',
