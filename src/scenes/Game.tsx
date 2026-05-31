@@ -37,6 +37,9 @@ export class Game extends Phaser.Scene {
   private groundY = 0;
   private stormOverlay!: Phaser.GameObjects.Graphics;
   private windStreaks!: Phaser.GameObjects.Graphics;
+  private stormBar?: Phaser.GameObjects.Graphics;
+  private stormBarLabel?: Phaser.GameObjects.Text;
+  private stormBarProgress = 1;
   private rainTimer?: Phaser.Time.TimerEvent;
   private debrisTimer?: Phaser.Time.TimerEvent;
   private countdownTimer?: Phaser.Time.TimerEvent;
@@ -235,14 +238,23 @@ export class Game extends Phaser.Scene {
       .forEach((img) => img.setTint(0x8899aa));
 
     this.startRain();
+    this.createStormBar();
 
     if (this.config.weather.hasDebris) {
       this.startDebris();
     }
 
     // storm timer
-    this.time.delayedCall(this.config.weather.stormDurationMs, () => {
-      this.endStorm();
+    const duration = this.config.weather.stormDurationMs;
+    this.stormBarProgress = 1;
+    this.tweens.add({
+      targets: this,
+      stormBarProgress: 0,
+      duration,
+      ease: 'Linear',
+      onComplete: () => {
+        this.endStorm();
+      },
     });
   }
 
@@ -340,10 +352,60 @@ export class Game extends Phaser.Scene {
     this.setSurvivors(`❤️ ${String(alive)} / ${String(total)}`);
   }
 
+  private createStormBar() {
+    const { width } = this.scale;
+    const BAR_WIDTH = 300;
+    const BAR_HEIGHT = 12;
+    const BAR_X = (width - BAR_WIDTH) / 2;
+    const BAR_Y = 44;
+
+    this.stormBar = this.add.graphics();
+    this.stormBar.setDepth(16);
+
+    this.stormBarLabel = this.add
+      .text(width / 2, BAR_Y - 6, '☁ Storm', {
+        fontFamily: '"Lucida Grande", Helvetica, Arial, sans-serif',
+        fontSize: '14px',
+        color: '#7ee8fa',
+        stroke: '#000000',
+        strokeThickness: 3,
+      })
+      .setOrigin(0.5, 1)
+      .setDepth(16);
+
+    this.events.on(Phaser.Core.Events.PRE_RENDER, () => {
+      if (!this.stormBar?.active) {
+        return;
+      }
+      const progress = Phaser.Math.Clamp(this.stormBarProgress, 0, 1);
+      this.stormBar.clear();
+      this.stormBar.fillStyle(0x1a3a4a, 0.7);
+      this.stormBar.fillRoundedRect(
+        BAR_X - 2,
+        BAR_Y - 2,
+        BAR_WIDTH + 4,
+        BAR_HEIGHT + 4,
+        4,
+      );
+      this.stormBar.fillStyle(0x22d3ee, 0.9);
+      this.stormBar.fillRoundedRect(
+        BAR_X,
+        BAR_Y,
+        BAR_WIDTH * progress,
+        BAR_HEIGHT,
+        3,
+      );
+    });
+  }
+
   private endStorm() {
     this.phase = 'build';
     this.rainTimer?.remove();
     this.debrisTimer?.remove();
+    this.stormBar?.destroy();
+    this.stormBar = undefined;
+    this.stormBarLabel?.destroy();
+    this.stormBarLabel = undefined;
     fadeOutSound(this, this.rainMusic, 1500);
     this.animals.forEach((animal) => {
       animal.isStorming = false;
