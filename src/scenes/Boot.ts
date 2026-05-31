@@ -22,6 +22,12 @@ import box6 from '/sprites/swamp/objects/boxes/6.png';
 import fence1 from '/sprites/swamp/objects/fence/1.png';
 import fence2 from '/sprites/swamp/objects/fence/2.png';
 import fence3 from '/sprites/swamp/objects/fence/3.png';
+import ridge1 from '/sprites/swamp/objects/ridges/1.png';
+import ridge2 from '/sprites/swamp/objects/ridges/2.png';
+import ridge3 from '/sprites/swamp/objects/ridges/3.png';
+import ridge4 from '/sprites/swamp/objects/ridges/4.png';
+import ridge5 from '/sprites/swamp/objects/ridges/5.png';
+import ridge6 from '/sprites/swamp/objects/ridges/6.png';
 import stone1 from '/sprites/swamp/objects/stones/1.png';
 import stone2 from '/sprites/swamp/objects/stones/2.png';
 import stone3 from '/sprites/swamp/objects/stones/3.png';
@@ -58,6 +64,13 @@ export class Boot extends Phaser.Scene {
     this.load.image(Texture.Fence1, fence1);
     this.load.image(Texture.Fence2, fence2);
     this.load.image(Texture.Fence3, fence3);
+
+    this.load.image(Texture.Ridge1, ridge1);
+    this.load.image(Texture.Ridge2, ridge2);
+    this.load.image(Texture.Ridge3, ridge3);
+    this.load.image(Texture.Ridge4, ridge4);
+    this.load.image(Texture.Ridge5, ridge5);
+    this.load.image(Texture.Ridge6, ridge6);
 
     this.load.image(Texture.FrogSprite, frogSprite);
     this.load.spritesheet(Texture.OpossumIdle, opossumIdle, {

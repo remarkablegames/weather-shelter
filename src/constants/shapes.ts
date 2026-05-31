@@ -145,4 +145,64 @@ export const BLOCK_SHAPES: Record<string, VertexPoint[] | null> = {
     { x: 8, y: 3 },
     { x: -8, y: 6 },
   ],
+
+  // Ridge1 (89×26): wide flat log, slightly angled left-to-right
+  Ridge1: [
+    { x: -44, y: 4 },
+    { x: -38, y: -12 },
+    { x: 30, y: -12 },
+    { x: 44, y: -4 },
+    { x: 44, y: 12 },
+    { x: -44, y: 12 },
+  ],
+
+  // Ridge2 (40×28): small rock chunk
+  Ridge2: [
+    { x: -16, y: -14 },
+    { x: 8, y: -14 },
+    { x: 18, y: -4 },
+    { x: 18, y: 10 },
+    { x: -18, y: 10 },
+    { x: -18, y: -4 },
+  ],
+
+  // Ridge3 (109×41): two crossed logs — use wide low bounding box
+  Ridge3: [
+    { x: -54, y: 6 },
+    { x: -40, y: -18 },
+    { x: 10, y: -18 },
+    { x: 54, y: 2 },
+    { x: 54, y: 18 },
+    { x: -54, y: 18 },
+  ],
+
+  // Ridge4 (65×61): tall tree stump
+  Ridge4: [
+    { x: -16, y: -30 },
+    { x: 16, y: -30 },
+    { x: 28, y: -10 },
+    { x: 28, y: 28 },
+    { x: -28, y: 28 },
+    { x: -28, y: -10 },
+  ],
+
+  // Ridge5 (81×29): wide flat log
+  Ridge5: [
+    { x: -40, y: -4 },
+    { x: -28, y: -14 },
+    { x: 28, y: -14 },
+    { x: 40, y: -4 },
+    { x: 40, y: 12 },
+    { x: -40, y: 12 },
+  ],
+
+  // Ridge6 (47×55): tall narrow stump
+  Ridge6: [
+    { x: -14, y: -26 },
+    { x: 14, y: -26 },
+    { x: 20, y: -10 },
+    { x: 20, y: 24 },
+    { x: -20, y: 24 },
+    { x: -20, y: -10 },
+  ],
 };
