@@ -25,12 +25,21 @@ export const BLOCK_SHAPES: Record<string, VertexPoint[] | null> = {
 
   // Stone1 (63×59): wide irregular boulder, wider at base, peaked top-left
   Stone1: [
-    { x: -28, y: -18 },
-    { x: -10, y: -29 },
-    { x: 12, y: -26 },
-    { x: 28, y: -12 },
-    { x: 30, y: 18 },
-    { x: -30, y: 18 },
+    { x: 62.0, y: 59.5 },
+    { x: 0.5, y: 59.0 },
+    { x: 1.5, y: 49.0 },
+    { x: 11.5, y: 23.0 },
+    { x: 13.0, y: 21.5 },
+    { x: 18.0, y: 22.5 },
+    { x: 20.5, y: 20.0 },
+    { x: 24.5, y: 8.0 },
+    { x: 30.0, y: 2.5 },
+    { x: 35.0, y: 0.5 },
+    { x: 44.0, y: 0.5 },
+    { x: 54.5, y: 10.0 },
+    { x: 57.5, y: 25.0 },
+    { x: 57.5, y: 40.0 },
+    { x: 63.5, y: 46.0 },
   ],
 
   // Stone2 (47×57): tall tombstone — narrow top, slightly wider base

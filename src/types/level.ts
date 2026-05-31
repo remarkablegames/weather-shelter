@@ -1,7 +1,5 @@
 import { Texture } from '../constants';
 
-export type BlockType = 'box' | 'stone' | 'plank';
-
 export interface WeatherConfig {
   rainIntervalMs: number;
   windForce: number;
@@ -20,7 +18,7 @@ export interface LevelConfig {
   level: number;
   timerSeconds: number | null;
   creatures: CreatureConfig[];
-  blockTypes: BlockType[];
+  blockTextures: Texture[];
   blockCount: number;
   weather: WeatherConfig;
 }

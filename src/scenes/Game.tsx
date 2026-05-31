@@ -10,7 +10,7 @@ import {
   ensureRainDropTexture,
   RainDrop,
 } from '../gameobjects/Weather';
-import { BlockType, LevelConfig } from '../types/level';
+import { LevelConfig } from '../types/level';
 
 const BLOCK_SCALE = 2;
 const CREATURE_SCALE = 3;
@@ -115,44 +115,16 @@ export class Game extends Phaser.Scene {
   }
 
   private spawnBlocks() {
-    const blockTypes: BlockType[] = this.config.blockTypes;
+    const textures = this.config.blockTextures;
     const count = this.config.blockCount;
     const groundY = this.groundY;
 
     for (let i = 0; i < count; i++) {
-      const type = blockTypes[i % blockTypes.length];
+      const texture = textures[Math.floor(Math.random() * textures.length)];
       const x = Phaser.Math.Between(BLOCK_SPAWN_X_MIN, BLOCK_SPAWN_X_MAX);
-      const block = new Block(
-        this,
-        x,
-        groundY - 40,
-        this.randomTexture(type),
-        BLOCK_SCALE,
-      );
+      const block = new Block(this, x, groundY - 40, texture, BLOCK_SCALE);
       this.blocks.push(block);
     }
-  }
-
-  private randomTexture(type: BlockType): Texture {
-    const boxes = [
-      Texture.Box1,
-      Texture.Box2,
-      Texture.Box3,
-      Texture.Box4,
-      Texture.Box5,
-      Texture.Box6,
-    ];
-    const stones = [
-      Texture.Stone1,
-      Texture.Stone2,
-      Texture.Stone3,
-      Texture.Stone4,
-      Texture.Stone5,
-    ];
-    const planks = [Texture.Plank1, Texture.Plank2, Texture.Plank3];
-
-    const arr = type === 'box' ? boxes : type === 'stone' ? stones : planks;
-    return arr[Math.floor(Math.random() * arr.length)];
   }
 
   private createLaunchButton(width: number) {

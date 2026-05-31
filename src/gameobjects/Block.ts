@@ -1,41 +1,8 @@
 import Phaser from 'phaser';
 
 import { BLOCK_SHAPES, Texture } from '../constants';
-import { BlockType } from '../types/level';
 
 const DRAG_SCALE = 1.08;
-
-const BOX_TEXTURES: Texture[] = [
-  Texture.Box1,
-  Texture.Box2,
-  Texture.Box3,
-  Texture.Box4,
-  Texture.Box5,
-  Texture.Box6,
-];
-const STONE_TEXTURES: Texture[] = [
-  Texture.Stone1,
-  Texture.Stone2,
-  Texture.Stone3,
-  Texture.Stone4,
-  Texture.Stone5,
-];
-const PLANK_TEXTURES: Texture[] = [
-  Texture.Plank1,
-  Texture.Plank2,
-  Texture.Plank3,
-];
-
-export function randomBlockTexture(type: BlockType): Texture {
-  switch (type) {
-    case 'box':
-      return BOX_TEXTURES[Math.floor(Math.random() * BOX_TEXTURES.length)];
-    case 'stone':
-      return STONE_TEXTURES[Math.floor(Math.random() * STONE_TEXTURES.length)];
-    case 'plank':
-      return PLANK_TEXTURES[Math.floor(Math.random() * PLANK_TEXTURES.length)];
-  }
-}
 
 export class Block extends Phaser.Physics.Matter.Image {
   isDragging = false;
