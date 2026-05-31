@@ -177,14 +177,20 @@ export const BLOCK_SHAPES: Record<string, VertexPoint[] | null> = {
     { x: 54, y: 18 },
   ],
 
-  // Ridge4 (65×61): tall tree stump
+  // Ridge4 (65×61): tree stump — rook profile, wide crown, narrow waist, wide base
   Ridge4: [
-    { x: -16, y: -30 },
-    { x: 16, y: -30 },
-    { x: 28, y: -10 },
+    { x: -18, y: -30 },
+    { x: 30, y: -30 },
+    { x: 30, y: -8 },
+    { x: 16, y: -2 },
+    { x: 16, y: 10 },
+    { x: 28, y: 16 },
     { x: 28, y: 28 },
     { x: -28, y: 28 },
-    { x: -28, y: -10 },
+    { x: -10, y: 16 },
+    { x: -10, y: 10 },
+    { x: -10, y: -2 },
+    { x: -18, y: -8 },
   ],
 
   // Ridge5 (81×29): wide flat log
