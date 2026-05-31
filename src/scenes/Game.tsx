@@ -95,14 +95,7 @@ export class Game extends Phaser.Scene {
   }
 
   private createGround(width: number, height: number) {
-    const groundBody = this.matter.add.rectangle(
-      width / 2,
-      height + 20,
-      width,
-      40,
-      { isStatic: true, label: 'ground', friction: 1, frictionStatic: 1 },
-    );
-    void groundBody;
+    this.matter.world.setBounds(0, 0, width, height);
   }
 
   private createCreatures() {
