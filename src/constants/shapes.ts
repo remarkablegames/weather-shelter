@@ -148,12 +148,12 @@ export const BLOCK_SHAPES: Record<string, VertexPoint[] | null> = {
 
   // Ridge1 (89×26): wide flat log, slightly angled left-to-right
   Ridge1: [
-    { x: -44, y: 4 },
-    { x: -38, y: -12 },
-    { x: 30, y: -12 },
-    { x: 44, y: -4 },
+    { x: -32, y: -12 },
+    { x: -10, y: -12 },
+    { x: 44, y: 8 },
     { x: 44, y: 12 },
     { x: -44, y: 12 },
+    { x: -44, y: 0 },
   ],
 
   // Ridge2 (40×28): small rock chunk
