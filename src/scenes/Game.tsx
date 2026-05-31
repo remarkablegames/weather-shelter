@@ -63,11 +63,15 @@ export class Game extends Phaser.Scene {
     this.createLaunchButton(width);
 
     this.stormOverlay = this.add.graphics();
+    this.stormOverlay.fillStyle(0x100820, 1);
+    this.stormOverlay.fillRect(0, 0, width, height);
     this.stormOverlay.setDepth(15);
     this.stormOverlay.setAlpha(0);
 
     this.windStreaks = this.add.graphics();
     this.windStreaks.setDepth(9);
+
+    this.setupRainCollisions();
 
     if (this.config.timerSeconds !== null) {
       this.startCountdown();
@@ -239,35 +243,23 @@ export class Game extends Phaser.Scene {
       c.isStorming = true;
     });
 
-    this.cameras.main.shake(500, 0.01);
+    this.cameras.main.shake(300, 0.01);
     this.flashLightning();
 
     this.tweens.add({
       targets: this.stormOverlay,
-      alpha: 1,
+      alpha: 0.15,
       duration: 2000,
-      onUpdate: () => {
-        const a = this.stormOverlay.alpha * 0.5;
-        this.stormOverlay.clear();
-        this.stormOverlay.fillStyle(0x100820, a);
-        this.stormOverlay.fillRect(0, 0, this.scale.width, this.scale.height);
-      },
     });
 
-    const skyLayers = this.children.list.filter(
-      (obj): obj is Phaser.GameObjects.Image =>
-        obj instanceof Phaser.GameObjects.Image,
-    );
-    skyLayers.forEach((img) => {
-      this.tweens.add({
-        targets: img,
-        tint: 0x2a1a3a,
-        duration: 2000,
-      });
-    });
+    this.children.list
+      .filter(
+        (obj): obj is Phaser.GameObjects.Image =>
+          obj instanceof Phaser.GameObjects.Image && obj.depth < 5,
+      )
+      .forEach((img) => img.setTint(0x8899aa));
 
     this.startRain();
-    this.setupRainCollisions();
 
     if (this.config.weather.hasDebris) {
       this.startDebris();
@@ -282,31 +274,14 @@ export class Game extends Phaser.Scene {
   private flashLightning() {
     const flash = this.add.graphics();
     flash.setDepth(20);
-    flash.fillStyle(0xffffff, 0.85);
+    flash.fillStyle(0xffffff, 1);
     flash.fillRect(0, 0, this.scale.width, this.scale.height);
+    flash.setAlpha(0.5);
 
     this.tweens.add({
       targets: flash,
       alpha: 0,
       duration: 150,
-      onComplete: () => {
-        flash.destroy();
-        this.time.delayedCall(300, () => {
-          this.flashLightning2();
-        });
-      },
-    });
-  }
-
-  private flashLightning2() {
-    const flash = this.add.graphics();
-    flash.setDepth(20);
-    flash.fillStyle(0xffffff, 0.5);
-    flash.fillRect(0, 0, this.scale.width, this.scale.height);
-    this.tweens.add({
-      targets: flash,
-      alpha: 0,
-      duration: 100,
       onComplete: () => {
         flash.destroy();
       },
