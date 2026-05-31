@@ -5,10 +5,15 @@ const FONT = '"Lucida Grande", Helvetica, Arial, sans-serif';
 
 export type SetTimer = Dispatch<SetStateAction<number>>;
 export type SetSurvivors = Dispatch<SetStateAction<string>>;
+export type SetHint = Dispatch<SetStateAction<string>>;
 
 interface HUDProps {
   initialHint?: string;
-  onReady: (setTimer: SetTimer, setSurvivors: SetSurvivors) => void;
+  onReady: (
+    setTimer: SetTimer,
+    setSurvivors: SetSurvivors,
+    setHint: SetHint,
+  ) => void;
 }
 
 export function HUD({ initialHint = '', onReady }: HUDProps) {
@@ -20,7 +25,7 @@ export function HUD({ initialHint = '', onReady }: HUDProps) {
     setHint(initialHint);
   }, [initialHint]);
 
-  onReady(setTimer, setSurvivors);
+  onReady(setTimer, setSurvivors, setHint);
 
   return (
     <>

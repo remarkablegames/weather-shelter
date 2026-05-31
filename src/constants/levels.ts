@@ -105,6 +105,6 @@ export const LEVELS: LevelConfig[] = [
       hasDebris: true,
       stormDurationMs: 12000,
     },
-    hint: 'Two species to protect! Fence planks make great roofs.',
+    hint: 'Two species to protect! Planks make great roofs.',
   },
 ];

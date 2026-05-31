@@ -4,6 +4,7 @@ import { render } from 'phaser-jsx';
 import {
   Button,
   HUD,
+  type SetHint,
   type SetSurvivors,
   type SetTimer,
   type SetVisible,
@@ -45,6 +46,7 @@ export class Game extends Phaser.Scene {
   private countdownTimer?: Phaser.Time.TimerEvent;
   private setTimer!: SetTimer;
   private setSurvivors!: SetSurvivors;
+  private setHint!: SetHint;
   private setStartButtonVisible!: SetVisible;
   private twilightMusic?: Phaser.Sound.BaseSound;
   private rainMusic?: Phaser.Sound.BaseSound;
@@ -176,9 +178,14 @@ export class Game extends Phaser.Scene {
     render(
       <HUD
         initialHint={this.config.hint ?? ''}
-        onReady={(setTimer: SetTimer, setSurvivors: SetSurvivors) => {
+        onReady={(
+          setTimer: SetTimer,
+          setSurvivors: SetSurvivors,
+          setHint: SetHint,
+        ) => {
           this.setTimer = setTimer;
           this.setSurvivors = setSurvivors;
+          this.setHint = setHint;
         }}
       />,
       this,
@@ -212,6 +219,7 @@ export class Game extends Phaser.Scene {
 
     this.countdownTimer?.remove();
     this.setStartButtonVisible(false);
+    this.setHint('');
     this.setTimer(-1);
 
     this.blocks.forEach((b) => {
