@@ -3,7 +3,6 @@ import Phaser from 'phaser';
 import { Texture } from '../constants';
 
 enum Animation {
-  FrogIdle = 'FrogIdle',
   OpossumIdle = 'OpossumIdle',
   EagleIdle = 'EagleIdle',
   FoxIdle = 'FoxIdle',
@@ -49,18 +48,6 @@ export class Creature extends Phaser.Physics.Matter.Sprite {
 
   private createAnimations() {
     const anims = this.scene.anims;
-
-    if (!anims.exists(Animation.FrogIdle)) {
-      anims.create({
-        key: Animation.FrogIdle,
-        frames: anims.generateFrameNumbers(Texture.FrogIdle, {
-          start: 0,
-          end: 3,
-        }),
-        frameRate: 6,
-        repeat: -1,
-      });
-    }
 
     if (!anims.exists(Animation.OpossumIdle)) {
       anims.create({
@@ -115,8 +102,7 @@ export class Creature extends Phaser.Physics.Matter.Sprite {
 
   private playIdleAnimation() {
     switch (this.creatureType) {
-      case Texture.FrogIdle:
-        this.play(Animation.FrogIdle);
+      case Texture.FrogSprite:
         break;
       case Texture.OpossumIdle:
         this.play(Animation.OpossumIdle);

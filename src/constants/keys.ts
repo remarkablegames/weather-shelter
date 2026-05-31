@@ -29,7 +29,7 @@ export enum Texture {
   Plank2 = 'Plank2',
   Plank3 = 'Plank3',
 
-  FrogIdle = 'FrogIdle',
+  FrogSprite = 'FrogSprite',
   OpossumIdle = 'OpossumIdle',
   EagleAttack = 'EagleAttack',
   FoxIdle1 = 'FoxIdle1',

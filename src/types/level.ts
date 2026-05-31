@@ -9,11 +9,17 @@ export interface WeatherConfig {
   stormDurationMs: number;
 }
 
+export interface CreatureConfig {
+  x: number;
+  type: Texture;
+  width: number;
+  height: number;
+}
+
 export interface LevelConfig {
   level: number;
   timerSeconds: number | null;
-  creatureCount: number;
-  creatureTypes: Texture[];
+  creatures: CreatureConfig[];
   blockTypes: BlockType[];
   blockCount: number;
   weather: WeatherConfig;
@@ -23,8 +29,7 @@ export const LEVELS: LevelConfig[] = [
   {
     level: 1,
     timerSeconds: null,
-    creatureCount: 1,
-    creatureTypes: [Texture.FrogIdle],
+    creatures: [{ x: 640, type: Texture.FrogSprite, width: 17, height: 20 }],
     blockTypes: ['box', 'stone', 'plank'],
     blockCount: 6,
     weather: {
@@ -37,8 +42,10 @@ export const LEVELS: LevelConfig[] = [
   {
     level: 2,
     timerSeconds: 45,
-    creatureCount: 2,
-    creatureTypes: [Texture.FrogIdle, Texture.OpossumIdle],
+    creatures: [
+      { x: 540, type: Texture.FrogSprite, width: 17, height: 20 },
+      { x: 740, type: Texture.OpossumIdle, width: 36, height: 28 },
+    ],
     blockTypes: ['box', 'stone', 'plank'],
     blockCount: 8,
     weather: {
@@ -51,8 +58,11 @@ export const LEVELS: LevelConfig[] = [
   {
     level: 3,
     timerSeconds: 35,
-    creatureCount: 3,
-    creatureTypes: [Texture.FrogIdle, Texture.OpossumIdle, Texture.EagleAttack],
+    creatures: [
+      { x: 500, type: Texture.FrogSprite, width: 17, height: 20 },
+      { x: 640, type: Texture.OpossumIdle, width: 36, height: 28 },
+      { x: 780, type: Texture.EagleAttack, width: 40, height: 40 },
+    ],
     blockTypes: ['box', 'stone', 'plank'],
     blockCount: 10,
     weather: {

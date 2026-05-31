@@ -16,7 +16,6 @@ const BLOCK_SCALE = 2;
 const CREATURE_SCALE = 3;
 const BLOCK_SPAWN_X_MIN = 200;
 const BLOCK_SPAWN_X_MAX = 1100;
-const CREATURE_Y_OFFSET = 48;
 const DEBRIS_INTERVAL_MS = 3000;
 const WIND_STREAK_COUNT = 12;
 
@@ -103,15 +102,9 @@ export class Game extends Phaser.Scene {
   }
 
   private createCreatures() {
-    const creatureY = this.groundY - CREATURE_Y_OFFSET;
-    const positions = [
-      { x: 540, y: creatureY },
-      { x: 740, y: creatureY },
-      { x: 640, y: creatureY },
-    ].slice(0, this.config.creatureCount);
-    positions.forEach((pos, i) => {
-      const type = this.config.creatureTypes[i] ?? Texture.FrogIdle;
-      const creature = new Creature(this, pos.x, pos.y, type, CREATURE_SCALE);
+    this.config.creatures.forEach(({ x, type, height }) => {
+      const y = this.groundY - (height * CREATURE_SCALE) / 2;
+      const creature = new Creature(this, x, y, type, CREATURE_SCALE);
       this.creatures.push(creature);
     });
     this.updateSurvivorsHUD();
