@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 
+import rainAudio from '/sounds/rain.mp3';
+import thunderAudio from '/sounds/thunder.mp3';
 import twilightAudio from '/sounds/twilight.mp3';
 import eagleAttack from '/sprites/sunnyland/characters/eagle/spritesheets/eagle-attack.png';
 import foxIdle1 from '/sprites/sunnyland/characters/fox/sprites/idle/player-idle-1.png';
@@ -97,6 +99,8 @@ export class Boot extends Phaser.Scene {
     });
 
     this.load.audio(AudioKey.Twilight, twilightAudio);
+    this.load.audio(AudioKey.Thunder, thunderAudio);
+    this.load.audio(AudioKey.Rain, rainAudio);
   }
 
   create() {

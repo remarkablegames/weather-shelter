@@ -11,6 +11,7 @@ import {
   RainDrop,
 } from '../gameobjects/Weather';
 import { LevelConfig } from '../types/level';
+import { fadeInSound, fadeOutSound } from '../utils';
 
 const BLOCK_SCALE = 2;
 const ANIMAL_SCALE = 3;
@@ -36,6 +37,7 @@ export class Game extends Phaser.Scene {
   private setSurvivors!: SetSurvivors;
   private launchButton!: Phaser.GameObjects.Graphics;
   private twilightMusic?: Phaser.Sound.BaseSound;
+  private rainMusic?: Phaser.Sound.BaseSound;
   private launchText!: Phaser.GameObjects.Text;
   private timeLeft = 0;
 
@@ -79,18 +81,7 @@ export class Game extends Phaser.Scene {
       volume: 0,
     });
     this.twilightMusic.play();
-    const fadeProxy = { volume: 0 };
-    this.tweens.add({
-      targets: fadeProxy,
-      volume: 0.5,
-      duration: 2000,
-      onUpdate: () => {
-        if (this.twilightMusic) {
-          (this.twilightMusic as Phaser.Sound.WebAudioSound).volume =
-            fadeProxy.volume;
-        }
-      },
-    });
+    fadeInSound(this, this.twilightMusic, 0.5, 2000);
 
     if (this.config.timerSeconds !== null) {
       this.startCountdown();
@@ -212,6 +203,9 @@ export class Game extends Phaser.Scene {
     this.phase = 'storm';
 
     this.twilightMusic?.stop();
+    this.sound.play(AudioKey.Thunder, { volume: 0.4 });
+    this.rainMusic = this.sound.add(AudioKey.Rain, { loop: true });
+    this.rainMusic.play();
 
     this.countdownTimer?.remove();
     this.launchButton.setVisible(false);
@@ -342,7 +336,7 @@ export class Game extends Phaser.Scene {
   }
 
   private updateSurvivorsHUD() {
-    const alive = this.animals.filter((c) => !c.isDead).length;
+    const alive = this.animals.filter((animal) => !animal.isDead).length;
     const total = this.animals.length;
     this.setSurvivors(`🐾 ${String(alive)} / ${String(total)}`);
   }
@@ -351,11 +345,12 @@ export class Game extends Phaser.Scene {
     this.phase = 'build';
     this.rainTimer?.remove();
     this.debrisTimer?.remove();
-    this.animals.forEach((c) => {
-      c.isStorming = false;
+    fadeOutSound(this, this.rainMusic, 1500);
+    this.animals.forEach((animal) => {
+      animal.isStorming = false;
     });
 
-    const survived = this.animals.filter((c) => !c.isDead).length;
+    const survived = this.animals.filter((animal) => !animal.isDead).length;
     const total = this.animals.length;
 
     this.time.delayedCall(1500, () => {

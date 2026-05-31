@@ -7,6 +7,8 @@ export enum Scene {
 
 export enum AudioKey {
   Twilight = 'Twilight',
+  Thunder = 'Thunder',
+  Rain = 'Rain',
 }
 
 export enum Texture {
