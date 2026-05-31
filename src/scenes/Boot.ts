@@ -74,11 +74,11 @@ export class Boot extends Phaser.Scene {
 
     this.load.spritesheet(Texture.FrogSprite, frogIdle, {
       frameWidth: 35,
-      frameHeight: 32,
+      frameHeight: 21,
     });
     this.load.spritesheet(Texture.OpossumIdle, opossumIdle, {
       frameWidth: 36,
-      frameHeight: 24,
+      frameHeight: 28,
     });
     this.load.spritesheet(Texture.EagleAttack, eagleAttack, {
       frameWidth: 40,
