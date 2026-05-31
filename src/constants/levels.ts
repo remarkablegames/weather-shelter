@@ -79,4 +79,32 @@ export const LEVELS: LevelConfig[] = [
     },
     hint: 'Watch out for flying debris! Use heavy stones.',
   },
+
+  {
+    level: 4,
+    timerSeconds: 30,
+    animals: [
+      { x: 420, type: Texture.FrogSprite, width: 17, height: 20 },
+      { x: 860, type: Texture.OpossumIdle, width: 32, height: 24 },
+    ],
+    blocks: [
+      Texture.Box3,
+      Texture.Box4,
+      Texture.Box5,
+      Texture.Box6,
+      Texture.Stone3,
+      Texture.Stone4,
+      Texture.Stone5,
+      Texture.Fence1,
+      Texture.Fence2,
+      Texture.Fence3,
+    ],
+    weather: {
+      rainIntervalMs: 35,
+      windForce: 0.008,
+      hasDebris: true,
+      stormDurationMs: 12000,
+    },
+    hint: 'Two species to protect! Fence planks make great roofs.',
+  },
 ];
