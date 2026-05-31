@@ -168,14 +168,13 @@ export const BLOCK_SHAPES: Record<string, VertexPoint[] | null> = {
     { x: -18, y: 0 },
   ],
 
-  // Ridge3 (109×41): two crossed logs — use wide low bounding box
+  // Ridge3 (109×41): two crossed logs forming a tent/triangle
   Ridge3: [
-    { x: -54, y: 6 },
-    { x: -40, y: -18 },
-    { x: 10, y: -18 },
-    { x: 54, y: 2 },
-    { x: 54, y: 18 },
     { x: -54, y: 18 },
+    { x: -54, y: 8 },
+    { x: 0, y: -18 },
+    { x: 54, y: 8 },
+    { x: 54, y: 18 },
   ],
 
   // Ridge4 (65×61): tall tree stump
