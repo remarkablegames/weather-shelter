@@ -247,7 +247,7 @@ export class Animal extends Phaser.Physics.Matter.Sprite {
     this.setVelocityX(0);
     this.play(Animation.Death);
     this.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
-      this.setVisible(false);
+      this.destroy();
     });
   }
 
