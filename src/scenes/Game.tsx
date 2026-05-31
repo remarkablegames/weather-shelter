@@ -257,8 +257,9 @@ export class Game extends Phaser.Scene {
         bodyA: MatterJS.BodyType,
         bodyB: MatterJS.BodyType,
       ) => {
-        const isRain = (b: MatterJS.BodyType) => b.label === 'raindrop';
-        const isCreature = (b: MatterJS.BodyType) => b.label === 'creature';
+        const isRain = (body: MatterJS.BodyType) => body.label === 'raindrop';
+        const isCreature = (body: MatterJS.BodyType) =>
+          body.label === 'creature';
 
         let rainBody: MatterJS.BodyType | null = null;
         let otherBody: MatterJS.BodyType | null = null;
