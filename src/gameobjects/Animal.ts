@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import { Texture } from '../constants';
+import { AudioKey, Texture } from '../constants';
 
 enum Animation {
   OpossumIdle = 'OpossumIdle',
@@ -161,6 +161,7 @@ export class Animal extends Phaser.Physics.Matter.Sprite {
   takeDamage() {
     if (this.isDead || !this.isStorming) return;
     this.health = Math.max(0, this.health - HEALTH_HIT_AMOUNT);
+    this.scene.sound.play(AudioKey.Hit, { volume: 0.35 });
     if (this.health <= 0) {
       this.die();
     }

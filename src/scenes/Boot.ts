@@ -1,5 +1,10 @@
 import Phaser from 'phaser';
 
+import clickAudio from '/sounds/click.mp3';
+import dragAudio from '/sounds/drag.mp3';
+import dropAudio from '/sounds/drop.mp3';
+import hitAudio from '/sounds/hit.mp3';
+import hoverAudio from '/sounds/hover.mp3';
 import rainAudio from '/sounds/rain.mp3';
 import thunderAudio from '/sounds/thunder.mp3';
 import twilightAudio from '/sounds/twilight.mp3';
@@ -101,6 +106,11 @@ export class Boot extends Phaser.Scene {
     this.load.audio(AudioKey.Twilight, twilightAudio);
     this.load.audio(AudioKey.Thunder, thunderAudio);
     this.load.audio(AudioKey.Rain, rainAudio);
+    this.load.audio(AudioKey.Click, clickAudio);
+    this.load.audio(AudioKey.Drag, dragAudio);
+    this.load.audio(AudioKey.Drop, dropAudio);
+    this.load.audio(AudioKey.Hit, hitAudio);
+    this.load.audio(AudioKey.Hover, hoverAudio);
   }
 
   create() {

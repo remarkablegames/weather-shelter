@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import { BLOCK_SHAPES, Texture } from '../constants';
+import { AudioKey, BLOCK_SHAPES, Texture } from '../constants';
 import type { BlockShape } from '../constants/shapes';
 
 const DRAG_SCALE = 1.08;
@@ -66,6 +66,7 @@ export class Block extends Phaser.Physics.Matter.Image {
     if (this.isDragging) return;
     this.setTint(0xddeeff);
     this.scene.input.setDefaultCursor('grab');
+    this.scene.sound.play(AudioKey.Hover, { volume: 0.5 });
   };
 
   private onPointerOut = () => {
@@ -85,6 +86,7 @@ export class Block extends Phaser.Physics.Matter.Image {
     this.setScale(this.baseScale * DRAG_SCALE);
     this.scene.input.setDefaultCursor('grabbing');
     this.setDepth(12);
+    this.scene.sound.play(AudioKey.Drag, { volume: 0.4 });
 
     this.scene.input.on(Phaser.Input.Events.POINTER_MOVE, this.onPointerMove);
     this.scene.input.on(Phaser.Input.Events.POINTER_UP, this.endDrag);
@@ -114,6 +116,7 @@ export class Block extends Phaser.Physics.Matter.Image {
     this.scene.input.setDefaultCursor('default');
     this.scene.input.off(Phaser.Input.Events.POINTER_MOVE, this.onPointerMove);
     this.scene.input.off(Phaser.Input.Events.POINTER_UP, this.endDrag);
+    this.scene.sound.play(AudioKey.Drop, { volume: 0.25 });
   };
 
   disableDrag() {

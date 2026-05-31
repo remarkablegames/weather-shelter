@@ -1,5 +1,14 @@
-import { Graphics, Text, useEffect, useRef, useState } from 'phaser-jsx';
+import {
+  Graphics,
+  Text,
+  useEffect,
+  useRef,
+  useScene,
+  useState,
+} from 'phaser-jsx';
 import type { Dispatch, SetStateAction } from 'react';
+
+import { AudioKey } from '../constants';
 
 const FONT = '"Lucida Grande", Helvetica, Arial, sans-serif';
 
@@ -34,6 +43,7 @@ export function Button({
 }: ButtonProps) {
   const [visible, setVisible] = useState(true);
   const graphicsRef = useRef<Phaser.GameObjects.Graphics | null>(null);
+  const scene = useScene();
 
   onLoad?.(setVisible);
 
@@ -68,19 +78,25 @@ export function Button({
             x={x}
             y={y}
             depth={12}
-            ref={(g: Phaser.GameObjects.Graphics | null) => {
-              graphicsRef.current = g;
-              if (g) drawButton(bgColor);
+            ref={(graphics: Phaser.GameObjects.Graphics | null) => {
+              graphicsRef.current = graphics;
+              if (graphics) {
+                drawButton(bgColor);
+              }
             }}
             onPointerOver={() => {
               drawButton(bgHoverColor);
-              graphicsRef.current?.scene.input.setDefaultCursor('pointer');
+              scene.input.setDefaultCursor('pointer');
+              scene.sound.play(AudioKey.Hover, { volume: 0.5 });
             }}
             onPointerOut={() => {
               drawButton(bgColor);
-              graphicsRef.current?.scene.input.setDefaultCursor('default');
+              scene.input.setDefaultCursor('default');
             }}
-            onPointerDown={onClick}
+            onPointerDown={() => {
+              scene.sound.play(AudioKey.Click, { volume: 0.5 });
+              onClick();
+            }}
           />
           <Text
             x={x}

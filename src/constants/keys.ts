@@ -9,6 +9,11 @@ export enum AudioKey {
   Twilight = 'Twilight',
   Thunder = 'Thunder',
   Rain = 'Rain',
+  Click = 'Click',
+  Drag = 'Drag',
+  Drop = 'Drop',
+  Hit = 'Hit',
+  Hover = 'Hover',
 }
 
 export enum Texture {

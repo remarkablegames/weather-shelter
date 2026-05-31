@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { render } from 'phaser-jsx';
 
 import { ResultUI } from '../components';
-import { LEVELS, Scene, Texture } from '../constants';
+import { AudioKey, LEVELS, Scene, Texture } from '../constants';
 
 interface ResultData {
   survived: number;
@@ -59,9 +59,18 @@ export class Result extends Phaser.Scene {
         total={total}
         level={level}
         hasNextLevel={hasNextLevel}
-        onRetry={() => this.scene.start(Scene.Game, { level })}
-        onNext={() => this.scene.start(Scene.Game, { level: level + 1 })}
-        onMenu={() => this.scene.start(Scene.Menu)}
+        onRetry={() => {
+          this.sound.play(AudioKey.Click, { volume: 0.6 });
+          this.scene.start(Scene.Game, { level });
+        }}
+        onNext={() => {
+          this.sound.play(AudioKey.Click, { volume: 0.6 });
+          this.scene.start(Scene.Game, { level: level + 1 });
+        }}
+        onMenu={() => {
+          this.sound.play(AudioKey.Click, { volume: 0.6 });
+          this.scene.start(Scene.Menu);
+        }}
       />,
       this,
     );
