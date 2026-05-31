@@ -6,6 +6,7 @@ enum Animation {
   OpossumIdle = 'OpossumIdle',
   EagleIdle = 'EagleIdle',
   FoxIdle = 'FoxIdle',
+  FrogIdle = 'FrogIdle',
   Death = 'CreatureDeath',
 }
 
@@ -90,6 +91,23 @@ export class Creature extends Phaser.Physics.Matter.Sprite {
       });
     }
 
+    if (!anims.exists(Animation.FrogIdle)) {
+      anims.create({
+        key: Animation.FrogIdle,
+        frames: [
+          ...Array.from({ length: 20 }, () => ({
+            key: Texture.FrogSprite,
+            frame: 0,
+          })),
+          { key: Texture.FrogSprite, frame: 1 },
+          { key: Texture.FrogSprite, frame: 2 },
+          { key: Texture.FrogSprite, frame: 3 },
+        ],
+        frameRate: 6,
+        repeat: -1,
+      });
+    }
+
     if (!anims.exists(Animation.Death)) {
       anims.create({
         key: Animation.Death,
@@ -106,6 +124,8 @@ export class Creature extends Phaser.Physics.Matter.Sprite {
   private playIdleAnimation() {
     switch (this.creatureType) {
       case Texture.FrogSprite:
+        this.play(Animation.FrogIdle);
+        this.setRectangle(75, 45);
         break;
       case Texture.OpossumIdle:
         this.play(Animation.OpossumIdle);
