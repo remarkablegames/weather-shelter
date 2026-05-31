@@ -308,7 +308,10 @@ export class Game extends Phaser.Scene {
   }
 
   private applyWind() {
-    if (this.config.weather.windForce === 0) return;
+    if (this.phase !== 'storm' || this.config.weather.windForce === 0) {
+      return;
+    }
+
     this.animals.forEach((animal) => {
       if (!animal.isDead) {
         (animal.body as MatterJS.BodyType).force.x +=
