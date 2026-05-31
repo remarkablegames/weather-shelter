@@ -145,7 +145,7 @@ export class Game extends Phaser.Scene {
             this.startStorm();
           }
         }}
-        onReady={(setVisible: SetVisible) => {
+        onLoad={(setVisible: SetVisible) => {
           this.setStartButtonVisible = setVisible;
         }}
       />,

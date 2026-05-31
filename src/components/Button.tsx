@@ -14,8 +14,9 @@ interface ButtonProps {
   bgColor?: number;
   bgHoverColor?: number;
   textColor?: string;
+  fontSize?: number;
   onClick: () => void;
-  onReady: (setVisible: SetVisible) => void;
+  onLoad?: (setVisible: SetVisible) => void;
 }
 
 export function Button({
@@ -27,13 +28,14 @@ export function Button({
   bgColor = 0xaa2200,
   bgHoverColor = 0xcc4400,
   textColor = '#ffffff',
+  fontSize = 18,
   onClick,
-  onReady,
+  onLoad,
 }: ButtonProps) {
   const [visible, setVisible] = useState(true);
   const graphicsRef = useRef<Phaser.GameObjects.Graphics | null>(null);
 
-  onReady(setVisible);
+  onLoad?.(setVisible);
 
   useEffect(() => {
     const graphics = graphicsRef.current;
@@ -86,7 +88,7 @@ export function Button({
             text={text}
             style={{
               fontFamily: FONT,
-              fontSize: 18,
+              fontSize,
               color: textColor,
               stroke: '#000000',
               strokeThickness: 3,
