@@ -25,9 +25,9 @@ export enum Texture {
   Stone4 = 'Stone4',
   Stone5 = 'Stone5',
 
-  Plank1 = 'Plank1',
-  Plank2 = 'Plank2',
-  Plank3 = 'Plank3',
+  Fence1 = 'Fence1',
+  Fence2 = 'Fence2',
+  Fence3 = 'Fence3',
 
   FrogSprite = 'FrogSprite',
   OpossumIdle = 'OpossumIdle',

@@ -12,7 +12,7 @@ export const LEVELS: LevelConfig[] = [
       Texture.Box3,
       Texture.Stone1,
       Texture.Stone5,
-      Texture.Plank1,
+      Texture.Fence1,
     ],
     weather: {
       rainIntervalMs: 100,
@@ -36,8 +36,8 @@ export const LEVELS: LevelConfig[] = [
       Texture.Box4,
       Texture.Stone2,
       Texture.Stone3,
-      Texture.Plank1,
-      Texture.Plank2,
+      Texture.Fence1,
+      Texture.Fence2,
     ],
     weather: {
       rainIntervalMs: 80,
@@ -63,9 +63,9 @@ export const LEVELS: LevelConfig[] = [
       Texture.Stone1,
       Texture.Stone2,
       Texture.Stone3,
-      Texture.Plank1,
-      Texture.Plank2,
-      Texture.Plank3,
+      Texture.Fence1,
+      Texture.Fence2,
+      Texture.Fence3,
     ],
     weather: {
       rainIntervalMs: 60,
