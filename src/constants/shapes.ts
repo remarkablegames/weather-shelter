@@ -156,14 +156,16 @@ export const BLOCK_SHAPES: Record<string, VertexPoint[] | null> = {
     { x: -44, y: 0 },
   ],
 
-  // Ridge2 (40×28): small rock chunk
+  // Ridge2 (40×28): twin-peaked rock with valley in centre
   Ridge2: [
-    { x: -16, y: -14 },
-    { x: 8, y: -14 },
+    { x: -4, y: -8 },
+    { x: 4, y: -4 },
+    { x: 4, y: -6 },
+    { x: 10, y: -14 },
     { x: 18, y: -4 },
-    { x: 18, y: 10 },
-    { x: -18, y: 10 },
-    { x: -18, y: -4 },
+    { x: 20, y: 14 },
+    { x: -18, y: 14 },
+    { x: -18, y: 0 },
   ],
 
   // Ridge3 (109×41): two crossed logs — use wide low bounding box
