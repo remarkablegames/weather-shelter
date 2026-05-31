@@ -108,7 +108,7 @@ export class Game extends Phaser.Scene {
   private createCreatures() {
     this.config.creatures.forEach(({ x, type, height }) => {
       const y = this.groundY - (height * CREATURE_SCALE) / 2;
-      const creature = new Creature(this, x, y, type, CREATURE_SCALE);
+      const creature = new Creature(this, x, y, type, CREATURE_SCALE, height);
       this.creatures.push(creature);
     });
     this.updateSurvivorsHUD();

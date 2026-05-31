@@ -13,7 +13,7 @@ const MAX_HEALTH = 100;
 const HEALTH_HIT_AMOUNT = 12;
 const BAR_WIDTH = 32;
 const BAR_HEIGHT = 4;
-const BAR_OFFSET_Y = -24;
+const BAR_GAP = 4;
 
 export class Creature extends Phaser.Physics.Matter.Sprite {
   health = MAX_HEALTH;
@@ -22,6 +22,7 @@ export class Creature extends Phaser.Physics.Matter.Sprite {
 
   private healthBar!: Phaser.GameObjects.Graphics;
   private creatureType: Texture;
+  private barOffsetY = 0;
 
   constructor(
     scene: Phaser.Scene,
@@ -29,12 +30,14 @@ export class Creature extends Phaser.Physics.Matter.Sprite {
     y: number,
     type: Texture,
     scale = 2,
+    spriteHeight = 32,
   ) {
     super(scene.matter.world, x, y, type, 0);
     this.creatureType = type;
 
     scene.add.existing(this);
     this.setScale(scale);
+    this.barOffsetY = -(spriteHeight * scale) / 2 - BAR_GAP;
     this.setStatic(true);
     this.setDepth(6);
     (this.body as MatterJS.BodyType).label = 'creature';
@@ -145,7 +148,7 @@ export class Creature extends Phaser.Physics.Matter.Sprite {
 
   private drawHealthBar() {
     const bx = this.x - BAR_WIDTH / 2;
-    const by = this.y + BAR_OFFSET_Y;
+    const by = this.y + this.barOffsetY;
 
     this.healthBar.clear();
 
