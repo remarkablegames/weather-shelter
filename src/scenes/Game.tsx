@@ -443,10 +443,6 @@ export class Game extends Phaser.Scene {
     this.stormBarLabel?.destroy();
     this.stormBarLabel = undefined;
     fadeOutSound(this, this.rainMusic, 1000);
-    this.animals.forEach((animal) => {
-      animal.isStorming = false;
-    });
-
     const survived = this.animals.filter((animal) => !animal.isDead).length;
     const total = this.animals.length;
 

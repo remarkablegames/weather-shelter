@@ -9,7 +9,6 @@ export class Block extends Phaser.Physics.Matter.Image {
   isDragging = false;
 
   private baseScale: number;
-  private textureKey: string;
 
   constructor(
     scene: Phaser.Scene,
@@ -27,7 +26,7 @@ export class Block extends Phaser.Physics.Matter.Image {
       restitution: 0.1,
       friction: 0.8,
       frictionStatic: 1,
-      density: isStone ? 0.5 : 0.003,
+      density: isStone ? 5 : 0.003,
       isStatic: false,
     };
 
@@ -38,10 +37,8 @@ export class Block extends Phaser.Physics.Matter.Image {
     super(scene.matter.world, x, y, texture, undefined, bodyOptions);
 
     this.baseScale = scale;
-    this.textureKey = texture;
     scene.add.existing(this);
 
-    // Stone blocks don't collide with animals but still have gravity
     if (isStone) {
       this.setCollisionCategory(4);
       this.setCollidesWith([1, 4]); // Collide with default and stone

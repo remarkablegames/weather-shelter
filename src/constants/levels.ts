@@ -129,7 +129,7 @@ export const LEVELS: LevelConfig[] = [
       Texture.Fence3,
     ],
     weather: {
-      rainIntervalMs: 25,
+      rainIntervalMs: 30,
       windForce: 0.012,
       hasDebris: true,
       stormDurationMs: 12000,

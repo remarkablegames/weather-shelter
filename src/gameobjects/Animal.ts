@@ -52,12 +52,8 @@ export class Animal extends Phaser.Physics.Matter.Sprite {
     }
     this.setDepth(6);
     (this.body as MatterJS.BodyType).label = 'animal';
-    if (this.canMove) {
-      (this.body as MatterJS.BodyType).isSensor = true;
-    } else {
-      this.setCollisionCategory(2);
-      this.setCollidesWith([1, 2]); // Collide with default and animals
-    }
+    this.setCollisionCategory(2);
+    this.setCollidesWith([1, 2]);
 
     this.createAnimations();
     this.playIdleAnimation();
