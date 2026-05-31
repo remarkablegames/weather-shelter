@@ -7,7 +7,7 @@ export interface WeatherConfig {
   stormDurationMs: number;
 }
 
-export interface CreatureConfig {
+export interface AnimalConfig {
   x: number;
   type: Texture;
   width: number;
@@ -17,7 +17,7 @@ export interface CreatureConfig {
 export interface LevelConfig {
   level: number;
   timerSeconds: number | null;
-  creatures: CreatureConfig[];
+  animals: AnimalConfig[];
   blocks: Texture[];
   weather: WeatherConfig;
 }

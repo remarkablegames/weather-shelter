@@ -8,11 +8,11 @@ Replace the existing Phaser 3 starter platformer with a physics-based puzzle gam
 
 - **Phases**: Build phase → Storm phase → Result screen
 - **Level 1**: Tutorial — no timer, rain only, 1 frog to shelter, 3 block types
-- **Level 2+**: Countdown timer, increasing creature count, worse weather (wind added L2, debris added L3+), more/different blocks
-- **Damage model**: each creature has a **health bar** (0–100) that decreases when hit by a `RainDrop` physics body. Rain drops are sensor bodies that call `creature.takeDamage()` on collision and self-destroy. Sheltered creatures (rain blocked by stacked blocks) take no damage. Health does not regenerate.
-- **Win condition**: storm ends with all creatures alive (health never reached 0)
-- **Lose condition**: one or more creatures die during the storm (health hit 0); storm always plays to completion before showing the Result screen
-- **Result screen**: shows survivors count (e.g. "2/3 creatures survived"); pass = all survived, fail = any died
+- **Level 2+**: Countdown timer, increasing animal count, worse weather (wind added L2, debris added L3+), more/different blocks
+- **Damage model**: each animal has a **health bar** (0–100) that decreases when hit by a `RainDrop` physics body. Rain drops are sensor bodies that call `animal.takeDamage()` on collision and self-destroy. Sheltered animals (rain blocked by stacked blocks) take no damage. Health does not regenerate.
+- **Win condition**: storm ends with all animals alive (health never reached 0)
+- **Lose condition**: one or more animals die during the storm (health hit 0); storm always plays to completion before showing the Result screen
+- **Result screen**: shows survivors count (e.g. "2/3 animals survived"); pass = all survived, fail = any died
 
 ---
 
@@ -31,22 +31,22 @@ Replace the existing Phaser 3 starter platformer with a physics-based puzzle gam
 
 | Class      | Description                                                                                       |
 | ---------- | ------------------------------------------------------------------------------------------------- |
-| `Creature` | Animated sunnyland animal (eagle/fox/frog/opossum idle), physics body, health bar, `takeDamage()` |
+| `Animal`   | Animated sunnyland animal (eagle/fox/frog/opossum idle), physics body, health bar, `takeDamage()` |
 | `Block`    | Draggable/droppable physics block (plank, box, roof wedge), different sizes/masses                |
 | `RainDrop` | Falling/angled rain projectile; deactivates on hitting a block                                    |
 | `Debris`   | Heavy falling object; destroys blocks on impact                                                   |
 
 ### New Components
 
-| Component | Description                                |
-| --------- | ------------------------------------------ |
-| `HUD`     | Timer countdown + "creatures safe" counter |
+| Component | Description                              |
+| --------- | ---------------------------------------- |
+| `HUD`     | Timer countdown + "animals safe" counter |
 
 ### New Constants/Types
 
 - `Scene` enum: add `Menu`, `Game`, `Result`
 - `Texture` enum: all new sprite keys
-- `LevelConfig` type: timer, creatures, blocks available, weather intensity
+- `LevelConfig` type: timer, animals, blocks available, weather intensity
 
 ---
 
@@ -58,12 +58,12 @@ Add new `Scene` and `Texture` enum values for all new assets.
 
 ### 2. Extend Boot scene (`src/scenes/Boot.ts`)
 
-Load sunnyland creature sprites:
+Load sunnyland animal sprites:
 
 - `frog-idle.png` (spritesheet, 4 frames)
 - `opossum/spritesheet.png` (6-frame idle)
 - `eagle-attack.png` (spritesheet)
-- FX: `enemy-death.png` for creature-hit effect
+- FX: `enemy-death.png` for animal-hit effect
 
 Load swamp assets:
 
@@ -77,21 +77,21 @@ Load swamp assets:
 interface LevelConfig {
   level: number;
   timerSeconds: number | null; // null = no timer (tutorial)
-  creatureCount: number;
-  blockTypes: BlockType[];
+  animals: AnimalConfig[];
+  blocks: Texture[];
   weather: WeatherConfig;
 }
 ```
 
-### 4. Create `Creature` game object (`src/gameobjects/Creature.ts`)
+### 4. Create `Animal` game object (`src/gameobjects/Animal.ts`)
 
 - Extends `Phaser.Physics.Matter.Sprite`
 - Plays idle animation for its type
 - `health`: 0–100 integer, starts at 100
 - `takeDamage()`: called by collision handler when a `RainDrop` hits; subtracts `HEALTH_HIT_AMOUNT` (12); triggers death at 0
-- A small **health bar** rendered above the creature (Phaser `Graphics`, green→orange→red fill on dark bg) — hidden at full health, shown when any damage taken
+- A small **health bar** rendered above the animal (Phaser `Graphics`, green→orange→red fill on dark bg) — hidden at full health, shown when any damage taken
 - At `health <= 0`: play `enemy-death` spritesheet animation, disable physics body, mark `isDead = true`
-- Body labeled `'creature'` for collision detection
+- Body labeled `'animal'` for collision detection
 - Tint shifts bluer as health decreases (visual feedback)
 
 ### 5. Create `Block` game object (`src/gameobjects/Block.ts`)
@@ -114,7 +114,7 @@ interface LevelConfig {
 ### 6. Create `RainDrop` & `Debris` game objects (`src/gameobjects/Weather.ts`)
 
 - `RainDrop`: small fast Matter dynamic body, diagonal velocity, destroyed on block collision via Matter collision events
-- `Debris`: larger Matter body with high mass, can rotate and knock blocks on impact, triggers creature damage on contact
+- `Debris`: larger Matter body with high mass, can rotate and knock blocks on impact, triggers animal damage on contact
 
 ### 7. Add `Menu` scene (`src/scenes/Menu.tsx`)
 
@@ -128,7 +128,7 @@ This is the core scene with two sub-phases:
 **Build phase:**
 
 - Render swamp background parallax layers (`swamp/background/layers/1–5.png`)
-- Spawn creatures at fixed positions (per level config)
+- Spawn animals at fixed positions (per level config)
 - Spawn `blockCount` blocks randomly along the ground (x range 200–1100); player drags them to build shelter
 - Show HUD timer (if not tutorial)
 - "Launch Storm" button (or timer auto-triggers)
@@ -137,10 +137,10 @@ This is the core scene with two sub-phases:
 
 - Disable block dragging, enable full physics
 - **Background transition**: tween layer 1 sky tint from blue-grey → dark purple/charcoal (`0x2a1a3a`) over 2s; add a semi-transparent dark `Graphics` overlay that fades in
-- **Rain**: spawn `RainDrop` sensor bodies (2×10px procedural texture, blue tint) at `rainIntervalMs` intervals from the top; destroyed on collision with any non-raindrop body; call `creature.takeDamage()` on collision with body labeled `'creature'`
-- **Wind**: apply `setForce` horizontally on exposed creature Matter bodies each frame; add horizontal white streak `Graphics` lines across scene for visual effect
+- **Rain**: spawn `RainDrop` sensor bodies (2×10px procedural texture, blue tint) at `rainIntervalMs` intervals from the top; destroyed on collision with any non-raindrop body; call `animal.takeDamage()` on collision with body labeled `'animal'`
+- **Wind**: apply `setForce` horizontally on exposed animal Matter bodies each frame; add horizontal white streak `Graphics` lines across scene for visual effect
 - **Debris** (level 3+): spawn stone sprites as high-mass Matter bodies falling from top, rotating on descent
-- Detect creature hits → mark creature as harmed
+- Detect animal hits → mark animal as harmed
 - After storm duration ends → tween sky back, fade out overlay, emit `stormEnd` event
 
 **Phase transition:**
@@ -150,13 +150,13 @@ This is the core scene with two sub-phases:
 
 ### 9. Add `Result` scene (`src/scenes/Result.tsx`)
 
-- Show pass/fail, creatures saved count
+- Show pass/fail, animals saved count
 - "Next Level" / "Retry" buttons
 - Save progress to `localStorage`
 
 ### 10. Add `HUD` component (`src/components/`)
 
-- `HUD.tsx`: countdown timer text + creatures-safe counter
+- `HUD.tsx`: countdown timer text + animals-safe counter
 
 ### 11. Wire up scene index and update `src/index.ts`
 
@@ -183,11 +183,11 @@ This is the core scene with two sub-phases:
 | `swamp/objects/boxes/1–6.png`                              | Box-type draggable blocks                |
 | `swamp/objects/stones/1–5.png`                             | Stone-type blocks (heavy) + storm debris |
 | `swamp/objects/fence/1–3.png`                              | Plank-type blocks (thin/long)            |
-| `sunnyland/characters/frog/spritesheets/frog-idle.png`     | Frog creature idle animation             |
-| `sunnyland/characters/opossum/spritesheet.png`             | Opossum creature idle                    |
-| `sunnyland/characters/eagle/spritesheets/eagle-attack.png` | Eagle creature                           |
-| `sunnyland/characters/foxy/sprites/idle/player-idle-*.png` | Fox creature idle frames                 |
-| `sunnyland/misc/fx/spritesheets/enemy-death.png`           | Creature-hit FX                          |
+| `sunnyland/characters/frog/spritesheets/frog-idle.png`     | Frog idle animation                      |
+| `sunnyland/characters/opossum/spritesheet.png`             | Opossum idle                             |
+| `sunnyland/characters/eagle/spritesheets/eagle-attack.png` | Eagle                                    |
+| `sunnyland/characters/foxy/sprites/idle/player-idle-*.png` | Fox idle frames                          |
+| `sunnyland/misc/fx/spritesheets/enemy-death.png`           | Animal-hit FX                            |
 
 ---
 
@@ -197,4 +197,4 @@ This is the core scene with two sub-phases:
 - `localStorage` used only for highest completed level
 - Physics: **Matter.js** (replaces Arcade in `src/index.ts` config); enables block rotation, friction, stable stacking, and toppling
 - Drag-and-drop via `Phaser.Physics.Matter.MatterGameObject` pointer events + `setStatic(true)` + direct `Matter.Body.setPosition` during drag
-- Creatures use Matter static bodies; rain/debris use Matter dynamic bodies
+- Animals use Matter static bodies; rain/debris use Matter dynamic bodies

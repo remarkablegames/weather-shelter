@@ -44,7 +44,7 @@ export function ResultUI({
       <Text
         x={640}
         y={285}
-        text={`${String(survived)} / ${String(total)} creatures survived`}
+        text={`${String(survived)} / ${String(total)} animals survived`}
         style={{
           fontFamily: FONT,
           fontSize: 28,

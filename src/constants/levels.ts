@@ -5,7 +5,7 @@ export const LEVELS: LevelConfig[] = [
   {
     level: 1,
     timerSeconds: null,
-    creatures: [{ x: 640, type: Texture.FrogSprite, width: 17, height: 20 }],
+    animals: [{ x: 640, type: Texture.FrogSprite, width: 17, height: 20 }],
     blocks: [
       Texture.Box1,
       Texture.Box2,
@@ -25,7 +25,7 @@ export const LEVELS: LevelConfig[] = [
   {
     level: 2,
     timerSeconds: 45,
-    creatures: [
+    animals: [
       { x: 540, type: Texture.FrogSprite, width: 17, height: 20 },
       { x: 740, type: Texture.OpossumIdle, width: 36, height: 28 },
     ],
@@ -50,7 +50,7 @@ export const LEVELS: LevelConfig[] = [
   {
     level: 3,
     timerSeconds: 35,
-    creatures: [
+    animals: [
       { x: 500, type: Texture.FrogSprite, width: 17, height: 20 },
       { x: 640, type: Texture.OpossumIdle, width: 36, height: 28 },
       { x: 780, type: Texture.EagleAttack, width: 40, height: 40 },

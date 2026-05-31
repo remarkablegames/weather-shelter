@@ -4,7 +4,7 @@ import { render } from 'phaser-jsx';
 import { HUD } from '../components';
 import type { SetSurvivors, SetTimer } from '../components/HUD';
 import { LEVELS, Scene, Texture } from '../constants';
-import { Block, Creature } from '../gameobjects';
+import { Animal, Block } from '../gameobjects';
 import {
   Debris,
   ensureRainDropTexture,
@@ -13,7 +13,7 @@ import {
 import { LevelConfig } from '../types/level';
 
 const BLOCK_SCALE = 2;
-const CREATURE_SCALE = 3;
+const ANIMAL_SCALE = 3;
 const BLOCK_SPAWN_X_MIN = 200;
 const BLOCK_SPAWN_X_MAX = 1100;
 const DEBRIS_INTERVAL_MS = 3000;
@@ -24,7 +24,7 @@ type Phase = 'build' | 'storm';
 export class Game extends Phaser.Scene {
   private config!: LevelConfig;
   private phase: Phase = 'build';
-  private creatures: Creature[] = [];
+  private animals: Animal[] = [];
   private blocks: Block[] = [];
   private groundY = 0;
   private stormOverlay!: Phaser.GameObjects.Graphics;
@@ -45,7 +45,7 @@ export class Game extends Phaser.Scene {
   init(data: { level?: number }) {
     this.config = LEVELS[(data.level ?? 1) - 1] ?? LEVELS[0];
     this.phase = 'build';
-    this.creatures = [];
+    this.animals = [];
     this.blocks = [];
     this.timeLeft = this.config.timerSeconds ?? 0;
   }
@@ -58,7 +58,7 @@ export class Game extends Phaser.Scene {
     this.createGround(width, height);
     ensureRainDropTexture(this);
     this.createHUD();
-    this.createCreatures();
+    this.createAnimals();
     this.spawnBlocks();
     this.createLaunchButton(width);
 
@@ -98,11 +98,11 @@ export class Game extends Phaser.Scene {
     this.matter.world.setBounds(0, 0, width, height);
   }
 
-  private createCreatures() {
-    this.config.creatures.forEach(({ x, type, height }) => {
-      const y = this.groundY - (height * CREATURE_SCALE) / 2;
-      const creature = new Creature(this, x, y, type, CREATURE_SCALE, height);
-      this.creatures.push(creature);
+  private createAnimals() {
+    this.config.animals.forEach(({ x, type, height }) => {
+      const y = this.groundY - (height * ANIMAL_SCALE) / 2;
+      const animal = new Animal(this, x, y, type, ANIMAL_SCALE, height);
+      this.animals.push(animal);
     });
     this.updateSurvivorsHUD();
   }
@@ -200,7 +200,7 @@ export class Game extends Phaser.Scene {
     this.blocks.forEach((b) => {
       b.disableDrag();
     });
-    this.creatures.forEach((c) => {
+    this.animals.forEach((c) => {
       c.isStorming = true;
     });
 
@@ -258,8 +258,7 @@ export class Game extends Phaser.Scene {
         bodyB: MatterJS.BodyType,
       ) => {
         const isRain = (body: MatterJS.BodyType) => body.label === 'raindrop';
-        const isCreature = (body: MatterJS.BodyType) =>
-          body.label === 'creature';
+        const isAnimal = (body: MatterJS.BodyType) => body.label === 'animal';
 
         let rainBody: MatterJS.BodyType | null = null;
         let otherBody: MatterJS.BodyType | null = null;
@@ -277,9 +276,9 @@ export class Game extends Phaser.Scene {
         const rainDrop = rainBody.gameObject as RainDrop | null;
         if (rainDrop?.active) rainDrop.destroy();
 
-        if (isCreature(otherBody)) {
-          const creature = otherBody.gameObject as Creature | null;
-          creature?.takeDamage();
+        if (isAnimal(otherBody)) {
+          const animal = otherBody.gameObject as Animal | null;
+          animal?.takeDamage();
         }
       },
     );
@@ -310,17 +309,17 @@ export class Game extends Phaser.Scene {
 
   private applyWind() {
     if (this.config.weather.windForce === 0) return;
-    this.creatures.forEach((creature) => {
-      if (!creature.isDead) {
-        (creature.body as MatterJS.BodyType).force.x +=
+    this.animals.forEach((animal) => {
+      if (!animal.isDead) {
+        (animal.body as MatterJS.BodyType).force.x +=
           this.config.weather.windForce;
       }
     });
   }
 
   private updateSurvivorsHUD() {
-    const alive = this.creatures.filter((c) => !c.isDead).length;
-    const total = this.creatures.length;
+    const alive = this.animals.filter((c) => !c.isDead).length;
+    const total = this.animals.length;
     this.setSurvivors(`🐾 ${String(alive)} / ${String(total)}`);
   }
 
@@ -328,12 +327,12 @@ export class Game extends Phaser.Scene {
     this.phase = 'build';
     this.rainTimer?.remove();
     this.debrisTimer?.remove();
-    this.creatures.forEach((c) => {
+    this.animals.forEach((c) => {
       c.isStorming = false;
     });
 
-    const survived = this.creatures.filter((c) => !c.isDead).length;
-    const total = this.creatures.length;
+    const survived = this.animals.filter((c) => !c.isDead).length;
+    const total = this.animals.length;
 
     this.time.delayedCall(1500, () => {
       this.scene.start(Scene.Result, {
@@ -345,8 +344,8 @@ export class Game extends Phaser.Scene {
   }
 
   update() {
-    this.creatures.forEach((creature) => {
-      creature.update();
+    this.animals.forEach((animal) => {
+      animal.update();
     });
     this.applyWind();
     this.drawWindStreaks();

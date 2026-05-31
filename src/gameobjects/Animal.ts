@@ -7,7 +7,7 @@ enum Animation {
   EagleIdle = 'EagleIdle',
   FoxIdle = 'FoxIdle',
   FrogIdle = 'FrogIdle',
-  Death = 'CreatureDeath',
+  Death = 'Death',
 }
 
 const MAX_HEALTH = 100;
@@ -16,13 +16,13 @@ const BAR_WIDTH = 32;
 const BAR_HEIGHT = 4;
 const BAR_GAP = 4;
 
-export class Creature extends Phaser.Physics.Matter.Sprite {
+export class Animal extends Phaser.Physics.Matter.Sprite {
   health = MAX_HEALTH;
   isDead = false;
   isStorming = false;
 
   private healthBar!: Phaser.GameObjects.Graphics;
-  private creatureType: Texture;
+  private animalType: Texture;
   private barOffsetY = 0;
 
   constructor(
@@ -34,14 +34,14 @@ export class Creature extends Phaser.Physics.Matter.Sprite {
     spriteHeight = 32,
   ) {
     super(scene.matter.world, x, y, type, 0);
-    this.creatureType = type;
+    this.animalType = type;
 
     scene.add.existing(this);
     this.setScale(scale);
     this.barOffsetY = -(spriteHeight * scale) / 2 - BAR_GAP;
     this.setStatic(true);
     this.setDepth(6);
-    (this.body as MatterJS.BodyType).label = 'creature';
+    (this.body as MatterJS.BodyType).label = 'animal';
 
     this.createAnimations();
     this.playIdleAnimation();
@@ -122,11 +122,11 @@ export class Creature extends Phaser.Physics.Matter.Sprite {
   }
 
   private playIdleAnimation() {
-    switch (this.creatureType) {
+    switch (this.animalType) {
       case Texture.FrogSprite:
         this.play(Animation.FrogIdle);
         this.setRectangle(75, 45);
-        (this.body as MatterJS.BodyType).label = 'creature';
+        (this.body as MatterJS.BodyType).label = 'animal';
         break;
       case Texture.OpossumIdle:
         this.play(Animation.OpossumIdle);

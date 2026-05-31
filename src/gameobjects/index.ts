@@ -1,3 +1,3 @@
+export * from './Animal';
 export * from './Block';
-export * from './Creature';
 export * from './Weather';

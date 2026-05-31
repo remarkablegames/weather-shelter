@@ -26,7 +26,7 @@ export function MenuUI({ onPlay }: MenuUIProps) {
       <Text
         x={640}
         y={295}
-        text="Build shelter for the creatures before the storm!"
+        text="Build shelter for the animals before the storm!"
         style={{
           fontFamily: FONT,
           fontSize: 20,
