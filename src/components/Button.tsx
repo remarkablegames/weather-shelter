@@ -1,11 +1,4 @@
-import {
-  Graphics,
-  Text,
-  useEffect,
-  useRef,
-  useScene,
-  useState,
-} from 'phaser-jsx';
+import { Graphics, Text, useRef, useScene, useState } from 'phaser-jsx';
 import type { Dispatch, SetStateAction } from 'react';
 
 import { AudioKey } from '../constants';
@@ -24,6 +17,7 @@ interface ButtonProps {
   bgHoverColor?: number;
   textColor?: string;
   fontSize?: number;
+  initialVisible?: boolean;
   onClick: () => void;
   onLoad?: (setVisible: SetVisible) => void;
 }
@@ -38,30 +32,21 @@ export function Button({
   bgHoverColor = 0xcc4400,
   textColor = '#ffffff',
   fontSize = 18,
+  initialVisible = true,
   onClick,
   onLoad,
 }: ButtonProps) {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(initialVisible);
   const graphicsRef = useRef<Phaser.GameObjects.Graphics | null>(null);
   const scene = useScene();
 
   onLoad?.(setVisible);
 
-  useEffect(() => {
-    const graphics = graphicsRef.current;
-    if (!graphics) return;
-    const halfW = width / 2;
-    const halfH = height / 2;
-    graphics.setInteractive(
-      new Phaser.Geom.Rectangle(-halfW, -halfH, width, height),
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      Phaser.Geom.Rectangle.Contains,
-    );
-  }, [width, height]);
-
   const drawButton = (color: number) => {
     const graphics = graphicsRef.current;
-    if (!graphics) return;
+    if (!graphics) {
+      return;
+    }
     const radius = 8;
     const halfW = width / 2;
     const halfH = height / 2;
@@ -77,10 +62,17 @@ export function Button({
           <Graphics
             x={x}
             y={y}
-            depth={12}
+            depth={17}
             ref={(graphics: Phaser.GameObjects.Graphics | null) => {
               graphicsRef.current = graphics;
               if (graphics) {
+                const halfW = width / 2;
+                const halfH = height / 2;
+                graphics.setInteractive(
+                  new Phaser.Geom.Rectangle(-halfW, -halfH, width, height),
+                  // eslint-disable-next-line @typescript-eslint/unbound-method
+                  Phaser.Geom.Rectangle.Contains,
+                );
                 drawButton(bgColor);
               }
             }}
@@ -111,7 +103,7 @@ export function Button({
             }}
             originX={0.5}
             originY={0.5}
-            depth={13}
+            depth={18}
           />
         </>
       )}

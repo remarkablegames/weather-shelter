@@ -48,6 +48,7 @@ export class Game extends Phaser.Scene {
   private setSurvivors!: SetSurvivors;
   private setHint!: SetHint;
   private setStartButtonVisible!: SetVisible;
+  private setRestartButtonVisible!: SetVisible;
   private twilightMusic?: Phaser.Sound.BaseSound;
   private rainMusic?: Phaser.Sound.BaseSound;
   private timeLeft = 0;
@@ -75,12 +76,15 @@ export class Game extends Phaser.Scene {
     this.createAnimals();
     this.spawnBlocks();
     this.createLaunchButton(width);
+    this.createRestartButton(width);
 
     this.stormOverlay = this.add.graphics();
     this.stormOverlay.fillStyle(0x100820, 1);
     this.stormOverlay.fillRect(0, 0, width, height);
     this.stormOverlay.setDepth(15);
     this.stormOverlay.setAlpha(0);
+    this.stormOverlay.setInteractive();
+    this.stormOverlay.disableInteractive();
 
     this.windStreaks = this.add.graphics();
     this.windStreaks.setDepth(9);
@@ -135,6 +139,29 @@ export class Game extends Phaser.Scene {
       const block = new Block(this, x, groundY - 40, texture, BLOCK_SCALE);
       this.blocks.push(block);
     });
+  }
+
+  private createRestartButton(width: number) {
+    render(
+      <Button
+        x={width - LAUNCH_BUTTON_RIGHT_OFFSET + LAUNCH_BUTTON_WIDTH / 2}
+        y={45}
+        text="Restart"
+        width={LAUNCH_BUTTON_WIDTH}
+        height={50}
+        bgColor={0x334455}
+        bgHoverColor={0x556677}
+        initialVisible={false}
+        onClick={() => {
+          this.sound.stopAll();
+          this.scene.start(Scene.Game, { level: this.config.level });
+        }}
+        onLoad={(setVisible: SetVisible) => {
+          this.setRestartButtonVisible = setVisible;
+        }}
+      />,
+      this,
+    );
   }
 
   private createLaunchButton(width: number) {
@@ -219,6 +246,7 @@ export class Game extends Phaser.Scene {
 
     this.countdownTimer?.remove();
     this.setStartButtonVisible(false);
+    this.setRestartButtonVisible(true);
     this.setHint('');
     this.setTimer(-1);
 
