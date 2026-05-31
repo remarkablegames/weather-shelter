@@ -15,8 +15,15 @@ Play the game on:
 
 ## Credits
 
+### Art
+
 - [Sunny Land](https://ansimuz.itch.io/sunny-land-pixel-game-art) by [ansimuz](https://ansimuz.itch.io/)
 - [Free Swamp 2D Tileset Pixel Art](https://free-game-assets.itch.io/free-swamp-2d-tileset-pixel-art) by [Free Game Assets](https://free-game-assets.itch.io/)
+
+### Sounds
+
+- [mexican mountain twilight](https://www.subsocials.com/stuff/mexican-mountain-twilight)
+- [Thunder Sound](https://pixabay.com/sound-effects/nature-thunder-sound-375727/) by [SoundReality](https://pixabay.com/users/soundreality-31074404/)
 
 ## Prerequisites
 

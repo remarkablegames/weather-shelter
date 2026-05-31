@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 
+import twilightAudio from '/sounds/twilight.mp3';
 import eagleAttack from '/sprites/sunnyland/characters/eagle/spritesheets/eagle-attack.png';
 import foxIdle1 from '/sprites/sunnyland/characters/fox/sprites/idle/player-idle-1.png';
 import foxIdle2 from '/sprites/sunnyland/characters/fox/sprites/idle/player-idle-2.png';
@@ -34,7 +35,7 @@ import stone3 from '/sprites/swamp/objects/stones/3.png';
 import stone4 from '/sprites/swamp/objects/stones/4.png';
 import stone5 from '/sprites/swamp/objects/stones/5.png';
 
-import { LEVELS, Scene, Texture } from '../constants';
+import { AudioKey, LEVELS, Scene, Texture } from '../constants';
 
 export class Boot extends Phaser.Scene {
   constructor() {
@@ -94,6 +95,8 @@ export class Boot extends Phaser.Scene {
       frameWidth: 40,
       frameHeight: 41,
     });
+
+    this.load.audio(AudioKey.Twilight, twilightAudio);
   }
 
   create() {

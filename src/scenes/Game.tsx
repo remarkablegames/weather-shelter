@@ -3,7 +3,7 @@ import { render } from 'phaser-jsx';
 
 import { HUD } from '../components';
 import type { SetSurvivors, SetTimer } from '../components/HUD';
-import { LEVELS, Scene, Texture } from '../constants';
+import { AudioKey, LEVELS, Scene, Texture } from '../constants';
 import { Animal, Block } from '../gameobjects';
 import {
   Debris,
@@ -35,6 +35,7 @@ export class Game extends Phaser.Scene {
   private setTimer!: SetTimer;
   private setSurvivors!: SetSurvivors;
   private launchButton!: Phaser.GameObjects.Graphics;
+  private twilightMusic?: Phaser.Sound.BaseSound;
   private launchText!: Phaser.GameObjects.Text;
   private timeLeft = 0;
 
@@ -72,6 +73,24 @@ export class Game extends Phaser.Scene {
     this.windStreaks.setDepth(9);
 
     this.setupRainCollisions();
+
+    this.twilightMusic = this.sound.add(AudioKey.Twilight, {
+      loop: true,
+      volume: 0,
+    });
+    this.twilightMusic.play();
+    const fadeProxy = { volume: 0 };
+    this.tweens.add({
+      targets: fadeProxy,
+      volume: 0.5,
+      duration: 2000,
+      onUpdate: () => {
+        if (this.twilightMusic) {
+          (this.twilightMusic as Phaser.Sound.WebAudioSound).volume =
+            fadeProxy.volume;
+        }
+      },
+    });
 
     if (this.config.timerSeconds !== null) {
       this.startCountdown();
@@ -191,6 +210,8 @@ export class Game extends Phaser.Scene {
   private startStorm() {
     if (this.phase === 'storm') return;
     this.phase = 'storm';
+
+    this.twilightMusic?.stop();
 
     this.countdownTimer?.remove();
     this.launchButton.setVisible(false);

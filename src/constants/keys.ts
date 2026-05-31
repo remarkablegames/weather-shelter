@@ -5,6 +5,10 @@ export enum Scene {
   Result = 'Result',
 }
 
+export enum AudioKey {
+  Twilight = 'Twilight',
+}
+
 export enum Texture {
   SwampBg1 = 'SwampBg1',
   SwampBg2 = 'SwampBg2',
