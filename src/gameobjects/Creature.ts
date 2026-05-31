@@ -126,6 +126,7 @@ export class Creature extends Phaser.Physics.Matter.Sprite {
       case Texture.FrogSprite:
         this.play(Animation.FrogIdle);
         this.setRectangle(75, 45);
+        (this.body as MatterJS.BodyType).label = 'creature';
         break;
       case Texture.OpossumIdle:
         this.play(Animation.OpossumIdle);
