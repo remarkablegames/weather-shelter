@@ -78,7 +78,7 @@ export class Boot extends Phaser.Scene {
     });
     this.load.spritesheet(Texture.OpossumIdle, opossumIdle, {
       frameWidth: 36,
-      frameHeight: 28,
+      frameHeight: 24,
     });
     this.load.spritesheet(Texture.EagleAttack, eagleAttack, {
       frameWidth: 40,

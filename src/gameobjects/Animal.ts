@@ -15,6 +15,8 @@ const HEALTH_HIT_AMOUNT = 12;
 const BAR_WIDTH = 32;
 const BAR_HEIGHT = 4;
 const BAR_GAP = 4;
+const WALK_SPEED = 1.5;
+const PATROL_RANGE = 150;
 
 export class Animal extends Phaser.Physics.Matter.Sprite {
   health = MAX_HEALTH;
@@ -24,6 +26,9 @@ export class Animal extends Phaser.Physics.Matter.Sprite {
   private healthBar!: Phaser.GameObjects.Graphics;
   private animalType: Texture;
   private barOffsetY = 0;
+  private startX = 0;
+  private facingRight = true;
+  private canMove = false;
 
   constructor(
     scene: Phaser.Scene,
@@ -39,9 +44,20 @@ export class Animal extends Phaser.Physics.Matter.Sprite {
     scene.add.existing(this);
     this.setScale(scale);
     this.barOffsetY = -(spriteHeight * scale) / 2 - BAR_GAP;
-    this.setStatic(true);
+    this.startX = x;
+    this.canMove = type === Texture.OpossumIdle;
+    if (this.canMove) {
+      this.setFlipX(true);
+      this.setFixedRotation();
+      this.setFriction(1);
+      this.setBounce(0);
+    } else {
+      this.setStatic(true);
+    }
     this.setDepth(6);
     (this.body as MatterJS.BodyType).label = 'animal';
+    this.setCollisionCategory(2);
+    this.setCollidesWith([1, 2]); // Collide with default and animals
 
     this.createAnimations();
     this.playIdleAnimation();
@@ -125,11 +141,13 @@ export class Animal extends Phaser.Physics.Matter.Sprite {
     switch (this.animalType) {
       case Texture.FrogSprite:
         this.play(Animation.FrogIdle);
-        this.setRectangle(75, 45);
+        this.setRectangle(75, 60);
         (this.body as MatterJS.BodyType).label = 'animal';
         break;
       case Texture.OpossumIdle:
         this.play(Animation.OpossumIdle);
+        this.setRectangle(70, 50);
+        (this.body as MatterJS.BodyType).label = 'animal';
         break;
       case Texture.EagleAttack:
         this.play(Animation.EagleIdle);
@@ -149,7 +167,15 @@ export class Animal extends Phaser.Physics.Matter.Sprite {
   }
 
   update() {
-    if (this.isDead) return;
+    if (this.isDead) {
+      return;
+    }
+
+    this.correctOrientation();
+
+    if (this.canMove && !this.isStorming) {
+      this.updateMovement();
+    }
 
     const t = 1 - this.health / MAX_HEALTH;
     if (t > 0) {
@@ -185,10 +211,39 @@ export class Animal extends Phaser.Physics.Matter.Sprite {
     this.healthBar.fillRect(bx, by, fill, BAR_HEIGHT);
   }
 
+  private correctOrientation() {
+    const angle = (this.body as MatterJS.BodyType).angle;
+    if (Math.abs(angle) > Math.PI / 2) {
+      this.setRotation(0);
+      this.setAngularVelocity(0);
+    }
+  }
+
+  private updateMovement() {
+    const displacement = this.x - this.startX;
+
+    if (this.facingRight) {
+      if (displacement >= PATROL_RANGE) {
+        this.facingRight = false;
+        this.setFlipX(false);
+      } else {
+        this.setVelocityX(WALK_SPEED);
+      }
+    } else {
+      if (displacement <= -PATROL_RANGE) {
+        this.facingRight = true;
+        this.setFlipX(true);
+      } else {
+        this.setVelocityX(-WALK_SPEED);
+      }
+    }
+  }
+
   private die() {
     this.isDead = true;
     this.healthBar.clear();
     this.setTexture(Texture.EnemyDeath);
+    this.setVelocityX(0);
     this.play(Animation.Death);
     this.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
       this.setVisible(false);
