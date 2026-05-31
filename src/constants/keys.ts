@@ -55,5 +55,5 @@ export enum Texture {
   FoxIdle3 = 'FoxIdle3',
   FoxIdle4 = 'FoxIdle4',
 
-  EnemyDeath = 'EnemyDeath',
+  AnimalDeath = 'AnimalDeath',
 }

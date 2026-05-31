@@ -98,7 +98,7 @@ export class Boot extends Phaser.Scene {
     this.load.image(Texture.FoxIdle3, foxIdle3);
     this.load.image(Texture.FoxIdle4, foxIdle4);
 
-    this.load.spritesheet(Texture.EnemyDeath, enemyDeath, {
+    this.load.spritesheet(Texture.AnimalDeath, enemyDeath, {
       frameWidth: 40,
       frameHeight: 41,
     });

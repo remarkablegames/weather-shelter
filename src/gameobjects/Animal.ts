@@ -127,7 +127,7 @@ export class Animal extends Phaser.Physics.Matter.Sprite {
     if (!anims.exists(Animation.Death)) {
       anims.create({
         key: Animation.Death,
-        frames: anims.generateFrameNumbers(Texture.EnemyDeath, {
+        frames: anims.generateFrameNumbers(Texture.AnimalDeath, {
           start: 0,
           end: 5,
         }),
@@ -243,7 +243,7 @@ export class Animal extends Phaser.Physics.Matter.Sprite {
   private die() {
     this.isDead = true;
     this.healthBar.clear();
-    this.setTexture(Texture.EnemyDeath);
+    this.setTexture(Texture.AnimalDeath);
     this.setVelocityX(0);
     this.play(Animation.Death);
     this.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
