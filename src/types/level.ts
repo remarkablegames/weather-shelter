@@ -18,7 +18,6 @@ export interface LevelConfig {
   level: number;
   timerSeconds: number | null;
   creatures: CreatureConfig[];
-  blockTextures: Texture[];
-  blockCount: number;
+  blocks: Texture[];
   weather: WeatherConfig;
 }

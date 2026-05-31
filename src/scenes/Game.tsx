@@ -108,16 +108,12 @@ export class Game extends Phaser.Scene {
   }
 
   private spawnBlocks() {
-    const textures = this.config.blockTextures;
-    const count = this.config.blockCount;
     const groundY = this.groundY;
-
-    for (let i = 0; i < count; i++) {
-      const texture = textures[Math.floor(Math.random() * textures.length)];
+    this.config.blocks.forEach((texture) => {
       const x = Phaser.Math.Between(BLOCK_SPAWN_X_MIN, BLOCK_SPAWN_X_MAX);
       const block = new Block(this, x, groundY - 40, texture, BLOCK_SCALE);
       this.blocks.push(block);
-    }
+    });
   }
 
   private createLaunchButton(width: number) {
