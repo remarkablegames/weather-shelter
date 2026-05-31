@@ -106,10 +106,7 @@ export class Block extends Phaser.Physics.Matter.Image {
     if (!this.isDragging) return;
     this.isDragging = false;
 
-    // Keep stone blocks static so opossum can't push them
-    if (!this.textureKey.startsWith('Stone')) {
-      this.setStatic(false);
-    }
+    this.setStatic(false);
     this.clearTint();
     this.setScale(this.baseScale);
     this.setDepth(7);
@@ -121,10 +118,6 @@ export class Block extends Phaser.Physics.Matter.Image {
 
   disableDrag() {
     this.endDrag();
-    // Ensure stone blocks are static even if never dragged
-    if (this.textureKey.startsWith('Stone')) {
-      this.setStatic(true);
-    }
     this.removeInteractive();
     this.scene.input.setDefaultCursor('default');
   }

@@ -107,4 +107,33 @@ export const LEVELS: LevelConfig[] = [
     },
     hint: 'Two species to protect! Planks make great roofs.',
   },
+
+  {
+    level: 5,
+    timerSeconds: 25,
+    animals: [
+      { x: 420, type: Texture.Opossum, width: 32, height: 24 },
+      { x: 860, type: Texture.Opossum, width: 32, height: 24 },
+    ],
+    blocks: [
+      Texture.Box4,
+      Texture.Box5,
+      Texture.Box6,
+      Texture.Stone1,
+      Texture.Stone2,
+      Texture.Stone3,
+      Texture.Stone4,
+      Texture.Stone5,
+      Texture.Fence1,
+      Texture.Fence2,
+      Texture.Fence3,
+    ],
+    weather: {
+      rainIntervalMs: 25,
+      windForce: 0.012,
+      hasDebris: true,
+      stormDurationMs: 12000,
+    },
+    hint: 'Both animals are on the move. Shelter them!',
+  },
 ];

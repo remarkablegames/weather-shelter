@@ -46,18 +46,18 @@ export class Animal extends Phaser.Physics.Matter.Sprite {
     this.barOffsetY = -(spriteHeight * scale) / 2 - BAR_GAP;
     this.startX = x;
     this.canMove = type === Texture.Opossum;
+    this.setStatic(true);
     if (this.canMove) {
       this.setFlipX(true);
-      this.setFixedRotation();
-      this.setFriction(1);
-      this.setBounce(0);
-    } else {
-      this.setStatic(true);
     }
     this.setDepth(6);
     (this.body as MatterJS.BodyType).label = 'animal';
-    this.setCollisionCategory(2);
-    this.setCollidesWith([1, 2]); // Collide with default and animals
+    if (this.canMove) {
+      (this.body as MatterJS.BodyType).isSensor = true;
+    } else {
+      this.setCollisionCategory(2);
+      this.setCollidesWith([1, 2]); // Collide with default and animals
+    }
 
     this.createAnimations();
     this.playIdleAnimation();
@@ -228,14 +228,22 @@ export class Animal extends Phaser.Physics.Matter.Sprite {
         this.facingRight = false;
         this.setFlipX(false);
       } else {
-        this.setVelocityX(WALK_SPEED);
+        this.scene.matter.body.setPosition(
+          this.body as MatterJS.BodyType,
+          { x: this.x + WALK_SPEED, y: this.y },
+          false,
+        );
       }
     } else {
       if (displacement <= -PATROL_RANGE) {
         this.facingRight = true;
         this.setFlipX(true);
       } else {
-        this.setVelocityX(-WALK_SPEED);
+        this.scene.matter.body.setPosition(
+          this.body as MatterJS.BodyType,
+          { x: this.x - WALK_SPEED, y: this.y },
+          false,
+        );
       }
     }
   }
