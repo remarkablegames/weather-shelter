@@ -3,14 +3,14 @@ import { render } from 'phaser-jsx';
 
 import { HUD } from '../components';
 import type { SetSurvivors, SetTimer } from '../components/HUD';
-import { Scene, Texture } from '../constants';
+import { LEVELS, Scene, Texture } from '../constants';
 import { Block, Creature } from '../gameobjects';
 import {
   Debris,
   ensureRainDropTexture,
   RainDrop,
 } from '../gameobjects/Weather';
-import { BlockType, LevelConfig, LEVELS } from '../types/level';
+import { BlockType, LevelConfig } from '../types/level';
 
 const BLOCK_SCALE = 2;
 const CREATURE_SCALE = 3;

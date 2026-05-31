@@ -2,8 +2,7 @@ import Phaser from 'phaser';
 import { render } from 'phaser-jsx';
 
 import { ResultUI } from '../components';
-import { Scene, Texture } from '../constants';
-import { LEVELS } from '../types/level';
+import { LEVELS, Scene, Texture } from '../constants';
 
 interface ResultData {
   survived: number;
