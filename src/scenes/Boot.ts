@@ -34,7 +34,7 @@ import stone3 from '/sprites/swamp/objects/stones/3.png';
 import stone4 from '/sprites/swamp/objects/stones/4.png';
 import stone5 from '/sprites/swamp/objects/stones/5.png';
 
-import { Scene, Texture } from '../constants';
+import { LEVELS, Scene, Texture } from '../constants';
 
 export class Boot extends Phaser.Scene {
   constructor() {
@@ -94,6 +94,17 @@ export class Boot extends Phaser.Scene {
   }
 
   create() {
-    this.scene.start(Scene.Menu);
+    const params = new URLSearchParams(window.location.search);
+    const levelParam = Number(params.get('level'));
+    const isValidLevel =
+      Number.isInteger(levelParam) &&
+      levelParam >= 1 &&
+      levelParam <= LEVELS.length;
+
+    if (isValidLevel) {
+      this.scene.start(Scene.Game, { level: levelParam });
+    } else {
+      this.scene.start(Scene.Menu);
+    }
   }
 }

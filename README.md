@@ -90,6 +90,14 @@ Builds the game and compresses the contents into a ZIP archive in the `dist` fol
 
 Your game can be uploaded to your server, [itch.io](https://itch.io/), [newgrounds](https://www.newgrounds.com/), etc.
 
+## Testing
+
+Start a specific level by appending `?level=<number>` to the URL (e.g., `?level=2`):
+
+```sh
+open http://localhost:5173/?level=2
+```
+
 ## License
 
 [MIT](LICENSE)

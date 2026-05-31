@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # build bundle
-BUNDLE=true npm run build -- --base=./
+npm run build -- --base=./
 
 # compress directory into single archive
 if [[ $CI != 'true' ]]; then
