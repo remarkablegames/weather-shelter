@@ -32,6 +32,7 @@ export function HUD({ onReady }: HUDProps) {
           }}
           originX={0.5}
           originY={0}
+          depth={14}
         />
       )}
       {survivors !== '' && (
@@ -39,6 +40,7 @@ export function HUD({ onReady }: HUDProps) {
           x={16}
           y={16}
           text={survivors}
+          depth={14}
           style={{
             fontFamily: FONT,
             fontSize: 22,
