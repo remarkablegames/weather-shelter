@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 
 import { BLOCK_SHAPES, Texture } from '../constants';
+import type { VertexPoint } from '../constants/shapes';
 
 const DRAG_SCALE = 1.08;
 
@@ -16,7 +17,18 @@ export class Block extends Phaser.Physics.Matter.Image {
     texture: Texture,
     scale = 2,
   ) {
-    const verts = BLOCK_SHAPES[texture] ?? null;
+    const shape = BLOCK_SHAPES[texture] ?? null;
+    let verts: VertexPoint[] | null = null;
+    let offset: { x: number; y: number } | undefined;
+    if (shape) {
+      if (Array.isArray(shape)) {
+        verts = shape;
+      } else {
+        verts = shape.verts;
+        offset = shape.offset;
+      }
+    }
+
     const bodyOptions: Phaser.Types.Physics.Matter.MatterBodyConfig = {
       restitution: 0.1,
       friction: 0.8,
@@ -34,6 +46,12 @@ export class Block extends Phaser.Physics.Matter.Image {
     scene.add.existing(this);
     this.setScale(scale);
     this.setDepth(7);
+
+    if (offset) {
+      const w = this.width || 1;
+      const h = this.height || 1;
+      this.setOrigin(0.5 - offset.x / w, 0.5 - offset.y / h);
+    }
 
     this.setInteractive({ cursor: 'grab' });
 

@@ -3,6 +3,11 @@ export interface VertexPoint {
   y: number;
 }
 
+export interface BlockShape {
+  verts: VertexPoint[];
+  offset?: { x: number; y: number };
+}
+
 /**
  * Custom Matter.js body vertex arrays per block sprite, relative to sprite centre.
  * Boxes use null (default rectangle body). Stones/planks use polygon approximations
@@ -15,7 +20,7 @@ export interface VertexPoint {
  *   Stone4: 57×30 Stone5: 31×31
  *   Plank1: 23×18 Plank2: 25×20 Plank3: 16×13
  */
-export const BLOCK_SHAPES: Record<string, VertexPoint[] | null> = {
+export const BLOCK_SHAPES: Record<string, BlockShape | VertexPoint[] | null> = {
   Box1: null,
   Box2: null,
   Box3: null,
@@ -203,13 +208,18 @@ export const BLOCK_SHAPES: Record<string, VertexPoint[] | null> = {
     { x: -40, y: 14 },
   ],
 
-  // Ridge6 (47×55): tall narrow stump
-  Ridge6: [
-    { x: -14, y: -26 },
-    { x: 14, y: -26 },
-    { x: 20, y: -10 },
-    { x: 20, y: 24 },
-    { x: -20, y: 24 },
-    { x: -20, y: -10 },
-  ],
+  // Ridge6 (47×55): tall main stump with smaller right stump
+  Ridge6: {
+    verts: [
+      { x: -8, y: -26 },
+      { x: 8, y: -26 },
+      { x: 14, y: -10 },
+      { x: 14, y: 4 },
+      { x: 22, y: 4 },
+      { x: 22, y: 27 },
+      { x: -14, y: 27 },
+      { x: -14, y: -10 },
+    ],
+    offset: { x: 2, y: -2 },
+  },
 };
