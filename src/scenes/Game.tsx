@@ -1,8 +1,13 @@
 import Phaser from 'phaser';
 import { render } from 'phaser-jsx';
 
-import { HUD } from '../components';
-import type { SetSurvivors, SetTimer } from '../components/HUD';
+import {
+  Button,
+  HUD,
+  type SetSurvivors,
+  type SetTimer,
+  type SetVisible,
+} from '../components';
 import { AudioKey, LEVELS, Scene, Texture } from '../constants';
 import { Animal, Block } from '../gameobjects';
 import {
@@ -37,10 +42,9 @@ export class Game extends Phaser.Scene {
   private countdownTimer?: Phaser.Time.TimerEvent;
   private setTimer!: SetTimer;
   private setSurvivors!: SetSurvivors;
-  private launchButton!: Phaser.GameObjects.Graphics;
+  private setStartButtonVisible!: SetVisible;
   private twilightMusic?: Phaser.Sound.BaseSound;
   private rainMusic?: Phaser.Sound.BaseSound;
-  private launchText!: Phaser.GameObjects.Text;
   private timeLeft = 0;
 
   constructor() {
@@ -129,47 +133,24 @@ export class Game extends Phaser.Scene {
   }
 
   private createLaunchButton(width: number) {
-    this.launchButton = this.add.graphics();
-    this.launchButton.setDepth(12);
-    this.launchButton.fillStyle(0xaa2200, 1);
-    this.launchButton.fillRoundedRect(
-      width - LAUNCH_BUTTON_RIGHT_OFFSET,
-      20,
-      LAUNCH_BUTTON_WIDTH,
-      50,
-      8,
+    render(
+      <Button
+        x={width - LAUNCH_BUTTON_RIGHT_OFFSET + LAUNCH_BUTTON_WIDTH / 2}
+        y={45}
+        text="Start Storm"
+        width={LAUNCH_BUTTON_WIDTH}
+        height={50}
+        onClick={() => {
+          if (this.phase === 'build') {
+            this.startStorm();
+          }
+        }}
+        onReady={(setVisible: SetVisible) => {
+          this.setStartButtonVisible = setVisible;
+        }}
+      />,
+      this,
     );
-    this.launchButton.setInteractive(
-      new Phaser.Geom.Rectangle(
-        width - LAUNCH_BUTTON_RIGHT_OFFSET,
-        20,
-        LAUNCH_BUTTON_WIDTH,
-        50,
-      ),
-      (rect: Phaser.Geom.Rectangle, x: number, y: number) =>
-        Phaser.Geom.Rectangle.Contains(rect, x, y),
-    );
-    this.launchButton.on(Phaser.Input.Events.POINTER_DOWN, () => {
-      if (this.phase === 'build') {
-        this.startStorm();
-      }
-    });
-
-    this.launchText = this.add
-      .text(
-        width - LAUNCH_BUTTON_RIGHT_OFFSET + LAUNCH_BUTTON_WIDTH / 2,
-        45,
-        'Start Storm',
-        {
-          fontFamily: '"Lucida Grande", Helvetica, Arial, sans-serif',
-          fontSize: 18,
-          color: '#ffffff',
-          stroke: '#000000',
-          strokeThickness: 3,
-        },
-      )
-      .setOrigin(0.5)
-      .setDepth(13);
   }
 
   private startRain() {
@@ -222,13 +203,12 @@ export class Game extends Phaser.Scene {
     this.phase = 'storm';
 
     this.twilightMusic?.stop();
-    this.sound.play(AudioKey.Thunder, { volume: 0.4 });
+    this.sound.play(AudioKey.Thunder, { volume: 0.3 });
     this.rainMusic = this.sound.add(AudioKey.Rain, { loop: true });
     this.rainMusic.play();
 
     this.countdownTimer?.remove();
-    this.launchButton.setVisible(false);
-    this.launchText.setVisible(false);
+    this.setStartButtonVisible(false);
     this.setTimer(-1);
 
     this.blocks.forEach((b) => {
