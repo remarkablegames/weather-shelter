@@ -1,12 +1,15 @@
 import Phaser from 'phaser';
 import { render } from 'phaser-jsx';
 
-import { HUD, PhaseLabel } from '../components';
+import { HUD } from '../components';
 import type { SetSurvivors, SetTimer } from '../components/HUD';
-import type { SetPhaseLabel } from '../components/PhaseLabel';
 import { Scene, Texture } from '../constants';
 import { Block, Creature } from '../gameobjects';
-import { Debris, RainDrop } from '../gameobjects/Weather';
+import {
+  Debris,
+  ensureRainDropTexture,
+  RainDrop,
+} from '../gameobjects/Weather';
 import { BlockType, LevelConfig, LEVELS } from '../types/level';
 
 const BLOCK_SCALE = 2;
@@ -14,7 +17,6 @@ const CREATURE_SCALE = 3;
 const BLOCK_SPAWN_X_MIN = 200;
 const BLOCK_SPAWN_X_MAX = 1100;
 const CREATURE_Y_OFFSET = 48;
-const RAIN_INTERVAL_MS = 200;
 const DEBRIS_INTERVAL_MS = 3000;
 const WIND_STREAK_COUNT = 12;
 
@@ -28,14 +30,11 @@ export class Game extends Phaser.Scene {
   private groundY = 0;
   private stormOverlay!: Phaser.GameObjects.Graphics;
   private windStreaks!: Phaser.GameObjects.Graphics;
-  private rainEmitter!: Phaser.GameObjects.Particles.ParticleEmitter;
   private rainTimer?: Phaser.Time.TimerEvent;
   private debrisTimer?: Phaser.Time.TimerEvent;
-  private stormTimer?: Phaser.Time.TimerEvent;
   private countdownTimer?: Phaser.Time.TimerEvent;
   private setTimer!: SetTimer;
   private setSurvivors!: SetSurvivors;
-  private setPhaseLabel!: SetPhaseLabel;
   private launchButton!: Phaser.GameObjects.Graphics;
   private launchText!: Phaser.GameObjects.Text;
   private timeLeft = 0;
@@ -58,7 +57,7 @@ export class Game extends Phaser.Scene {
     this.groundY = height;
     this.createBackground(width, height);
     this.createGround(width, height);
-    this.createRainEmitter();
+    ensureRainDropTexture(this);
     this.createHUD();
     this.createCreatures();
     this.spawnBlocks();
@@ -187,32 +186,20 @@ export class Game extends Phaser.Scene {
       .setDepth(13);
   }
 
-  private createRainEmitter() {
-    const rainTexture = this.textures.exists('rainDrop')
-      ? null
-      : this.textures.createCanvas('rainDrop', 2, 8);
-    if (rainTexture) {
-      const ctx = rainTexture.getContext();
-      ctx.fillStyle = 'rgba(180,220,255,0.8)';
-      ctx.fillRect(0, 0, 2, 8);
-      rainTexture.refresh();
-    }
-
-    this.rainEmitter = this.add.particles(0, 0, 'rainDrop', {
-      x: { min: -50, max: this.scale.width + 50 },
-      y: -20,
-      speedX: { min: 80, max: 140 },
-      speedY: { min: 500, max: 700 },
-      angle: 70,
-      lifespan: 1200,
-      frequency: 30,
-      quantity: 3,
-      alpha: { start: 0.8, end: 0 },
-      scaleX: 1,
-      scaleY: 1,
-      active: false,
+  private startRain() {
+    const interval = this.config.weather.rainIntervalMs;
+    this.rainTimer = this.time.addEvent({
+      delay: interval,
+      loop: true,
+      callback: () => {
+        if (this.phase !== 'storm') return;
+        const x = Phaser.Math.Between(-20, this.scale.width + 20);
+        const drop = new RainDrop(this, x, -10);
+        this.time.delayedCall(2500, () => {
+          if (drop.active) drop.destroy();
+        });
+      },
     });
-    this.rainEmitter.setDepth(11);
   }
 
   private createHUD() {
@@ -221,15 +208,6 @@ export class Game extends Phaser.Scene {
         onReady={(setTimer: SetTimer, setSurvivors: SetSurvivors) => {
           this.setTimer = setTimer;
           this.setSurvivors = setSurvivors;
-        }}
-      />,
-      this,
-    );
-
-    render(
-      <PhaseLabel
-        onReady={(setLabel: SetPhaseLabel) => {
-          this.setPhaseLabel = setLabel;
         }}
       />,
       this,
@@ -295,19 +273,17 @@ export class Game extends Phaser.Scene {
       });
     });
 
-    this.rainEmitter.start();
-    this.startRainPhysics();
+    this.startRain();
+    this.setupRainCollisions();
 
     if (this.config.weather.hasDebris) {
       this.startDebris();
     }
 
-    this.stormTimer = this.time.delayedCall(
-      this.config.weather.stormDurationMs,
-      () => {
-        this.endStorm();
-      },
-    );
+    // storm timer
+    this.time.delayedCall(this.config.weather.stormDurationMs, () => {
+      this.endStorm();
+    });
   }
 
   private flashLightning() {
@@ -344,37 +320,39 @@ export class Game extends Phaser.Scene {
     });
   }
 
-  private startRainPhysics() {
-    this.rainTimer = this.time.addEvent({
-      delay: RAIN_INTERVAL_MS / this.config.weather.rainRate,
-      loop: true,
-      callback: () => {
-        if (this.phase !== 'storm') return;
-        const x = Phaser.Math.Between(-50, this.scale.width + 50);
-        const drop = new RainDrop(this, x, -10);
+  private setupRainCollisions() {
+    this.matter.world.on(
+      Phaser.Physics.Matter.Events.COLLISION_START,
+      (
+        _event: Phaser.Physics.Matter.Events.CollisionStartEvent,
+        bodyA: MatterJS.BodyType,
+        bodyB: MatterJS.BodyType,
+      ) => {
+        const isRain = (b: MatterJS.BodyType) => b.label === 'raindrop';
+        const isCreature = (b: MatterJS.BodyType) => b.label === 'creature';
 
-        this.matter.world.on(
-          'collisionstart',
-          (
-            _event: Phaser.Physics.Matter.Events.CollisionStartEvent,
-            bodyA: MatterJS.BodyType,
-            bodyB: MatterJS.BodyType,
-          ) => {
-            const dropBody = drop.body as MatterJS.BodyType;
-            if (bodyA === dropBody || bodyB === dropBody) {
-              const other = bodyA === dropBody ? bodyB : bodyA;
-              if (other.label !== 'raindrop') {
-                drop.destroy();
-              }
-            }
-          },
-        );
+        let rainBody: MatterJS.BodyType | null = null;
+        let otherBody: MatterJS.BodyType | null = null;
 
-        this.time.delayedCall(3000, () => {
-          if (drop.active) drop.destroy();
-        });
+        if (isRain(bodyA)) {
+          rainBody = bodyA;
+          otherBody = bodyB;
+        } else if (isRain(bodyB)) {
+          rainBody = bodyB;
+          otherBody = bodyA;
+        }
+
+        if (!rainBody || !otherBody) return;
+
+        const rainDrop = rainBody.gameObject as RainDrop | null;
+        if (rainDrop?.active) rainDrop.destroy();
+
+        if (isCreature(otherBody)) {
+          const creature = otherBody.gameObject as Creature | null;
+          creature?.takeDamage();
+        }
       },
-    });
+    );
   }
 
   private startDebris() {
@@ -402,9 +380,10 @@ export class Game extends Phaser.Scene {
 
   private applyWind() {
     if (this.config.weather.windForce === 0) return;
-    this.creatures.forEach((c) => {
-      if (!c.isDead && c.isExposed) {
-        (c.body as MatterJS.BodyType).force.x += this.config.weather.windForce;
+    this.creatures.forEach((creature) => {
+      if (!creature.isDead) {
+        (creature.body as MatterJS.BodyType).force.x +=
+          this.config.weather.windForce;
       }
     });
   }
@@ -417,7 +396,6 @@ export class Game extends Phaser.Scene {
 
   private endStorm() {
     this.phase = 'build';
-    this.rainEmitter.stop();
     this.rainTimer?.remove();
     this.debrisTimer?.remove();
     this.creatures.forEach((c) => {
@@ -436,12 +414,9 @@ export class Game extends Phaser.Scene {
     });
   }
 
-  update(_time: number, delta: number) {
+  update() {
     this.creatures.forEach((creature) => {
-      creature.update(delta);
-    });
-    this.blocks.forEach((block) => {
-      block.update();
+      creature.update();
     });
     this.applyWind();
     this.drawWindStreaks();

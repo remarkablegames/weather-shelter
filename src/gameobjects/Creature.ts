@@ -10,18 +10,18 @@ enum Animation {
   Death = 'CreatureDeath',
 }
 
-const SOAK_FILL_RATE = 8;
-const SOAK_DRAIN_RATE = 3;
+const MAX_HEALTH = 100;
+const HEALTH_HIT_AMOUNT = 12;
 const BAR_WIDTH = 32;
 const BAR_HEIGHT = 4;
 const BAR_OFFSET_Y = -24;
 
 export class Creature extends Phaser.Physics.Matter.Sprite {
-  soakedMeter = 0;
+  health = MAX_HEALTH;
   isDead = false;
   isStorming = false;
 
-  private soakBar!: Phaser.GameObjects.Graphics;
+  private healthBar!: Phaser.GameObjects.Graphics;
   private creatureType: Texture;
 
   constructor(
@@ -38,12 +38,13 @@ export class Creature extends Phaser.Physics.Matter.Sprite {
     this.setScale(scale);
     this.setStatic(true);
     this.setDepth(6);
+    (this.body as MatterJS.BodyType).label = 'creature';
 
     this.createAnimations();
     this.playIdleAnimation();
 
-    this.soakBar = scene.add.graphics();
-    this.soakBar.setDepth(10);
+    this.healthBar = scene.add.graphics();
+    this.healthBar.setDepth(10);
   }
 
   private createAnimations() {
@@ -129,87 +130,54 @@ export class Creature extends Phaser.Physics.Matter.Sprite {
     }
   }
 
-  get isExposed(): boolean {
-    if (!this.isStorming) return false;
-    const bodies = this.scene.matter.world.getAllBodies();
-    const myX = this.x;
-    const myTop = this.y - this.displayHeight / 2;
-
-    for (const body of bodies) {
-      if (body === (this.body as MatterJS.BodyType)) continue;
-      const bounds = body.bounds;
-      if (
-        bounds.min.x < myX + 8 &&
-        bounds.max.x > myX - 8 &&
-        bounds.max.y < myTop &&
-        bounds.max.y > myTop - 200
-      ) {
-        return false;
-      }
+  takeDamage() {
+    if (this.isDead || !this.isStorming) return;
+    this.health = Math.max(0, this.health - HEALTH_HIT_AMOUNT);
+    if (this.health <= 0) {
+      this.die();
     }
-    return true;
   }
 
-  update(delta: number) {
+  update() {
     if (this.isDead) return;
 
-    if (this.isStorming) {
-      if (this.isExposed) {
-        this.soakedMeter = Math.min(
-          100,
-          this.soakedMeter + SOAK_FILL_RATE * (delta / 1000),
-        );
-      } else {
-        this.soakedMeter = Math.max(
-          0,
-          this.soakedMeter - SOAK_DRAIN_RATE * (delta / 1000),
-        );
-      }
-
-      const t = this.soakedMeter / 100;
-      const blue = Math.floor(0xff * t);
+    const t = 1 - this.health / MAX_HEALTH;
+    if (t > 0) {
       this.setTint(
         Phaser.Display.Color.GetColor(
           255 - Math.floor(80 * t),
           255 - Math.floor(80 * t),
-          Math.min(255, 200 + blue),
+          Math.min(255, 200 + Math.floor(0xff * t)),
         ),
       );
-
-      if (this.soakedMeter >= 100) {
-        this.die();
-        return;
-      }
+    } else {
+      this.clearTint();
     }
 
-    this.drawSoakBar();
+    this.drawHealthBar();
   }
 
-  private drawSoakBar() {
+  private drawHealthBar() {
     const bx = this.x - BAR_WIDTH / 2;
     const by = this.y + BAR_OFFSET_Y;
 
-    this.soakBar.clear();
+    this.healthBar.clear();
 
-    if (!this.isStorming || this.soakedMeter <= 0) return;
+    if (!this.isStorming || this.health >= MAX_HEALTH) return;
 
-    this.soakBar.fillStyle(0x000000, 0.6);
-    this.soakBar.fillRect(bx, by, BAR_WIDTH, BAR_HEIGHT);
+    this.healthBar.fillStyle(0x000000, 0.6);
+    this.healthBar.fillRect(bx, by, BAR_WIDTH, BAR_HEIGHT);
 
-    const fill = (this.soakedMeter / 100) * BAR_WIDTH;
+    const fill = (this.health / MAX_HEALTH) * BAR_WIDTH;
     const color =
-      this.soakedMeter < 50
-        ? 0x44aaff
-        : this.soakedMeter < 80
-          ? 0xff8800
-          : 0xff2200;
-    this.soakBar.fillStyle(color, 1);
-    this.soakBar.fillRect(bx, by, fill, BAR_HEIGHT);
+      this.health > 60 ? 0x44dd44 : this.health > 30 ? 0xffaa00 : 0xff2200;
+    this.healthBar.fillStyle(color, 1);
+    this.healthBar.fillRect(bx, by, fill, BAR_HEIGHT);
   }
 
   private die() {
     this.isDead = true;
-    this.soakBar.clear();
+    this.healthBar.clear();
     this.setTexture(Texture.EnemyDeath);
     this.play(Animation.Death);
     this.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
@@ -218,7 +186,7 @@ export class Creature extends Phaser.Physics.Matter.Sprite {
   }
 
   destroy(fromScene?: boolean) {
-    this.soakBar.destroy();
+    this.healthBar.destroy();
     super.destroy(fromScene);
   }
 }

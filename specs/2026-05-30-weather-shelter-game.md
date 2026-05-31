@@ -9,9 +9,9 @@ Replace the existing Phaser 3 starter platformer with a physics-based puzzle gam
 - **Phases**: Build phase → Storm phase → Result screen
 - **Level 1**: Tutorial — no timer, rain only, 1 frog to shelter, 3 block types
 - **Level 2+**: Countdown timer, increasing creature count, worse weather (wind added L2, debris added L3+), more/different blocks
-- **Damage model**: each creature has a **soaked meter** (0–100%) that fills while exposed to rain/wind during the storm, and drains slowly when sheltered. When it hits 100% the death animation plays and the creature is gone.
-- **Win condition**: storm ends with all creatures alive (soaked meter never reached 100%)
-- **Lose condition**: one or more creatures die during the storm (meter hit 100%); storm always plays to completion before showing the Result screen
+- **Damage model**: each creature has a **health bar** (0–100) that decreases when hit by a `RainDrop` physics body. Rain drops are sensor bodies that call `creature.takeDamage()` on collision and self-destroy. Sheltered creatures (rain blocked by stacked blocks) take no damage. Health does not regenerate.
+- **Win condition**: storm ends with all creatures alive (health never reached 0)
+- **Lose condition**: one or more creatures die during the storm (health hit 0); storm always plays to completion before showing the Result screen
 - **Result screen**: shows survivors count (e.g. "2/3 creatures survived"); pass = all survived, fail = any died
 
 ---
@@ -29,19 +29,18 @@ Replace the existing Phaser 3 starter platformer with a physics-based puzzle gam
 
 ### New Game Objects
 
-| Class      | Description                                                                                 |
-| ---------- | ------------------------------------------------------------------------------------------- |
-| `Creature` | Animated sunnyland animal (eagle/fox/frog/opossum idle), physics body, tracks `isProtected` |
-| `Block`    | Draggable/droppable physics block (plank, box, roof wedge), different sizes/masses          |
-| `RainDrop` | Falling/angled rain projectile; deactivates on hitting a block                              |
-| `Debris`   | Heavy falling object; destroys blocks on impact                                             |
+| Class      | Description                                                                                       |
+| ---------- | ------------------------------------------------------------------------------------------------- |
+| `Creature` | Animated sunnyland animal (eagle/fox/frog/opossum idle), physics body, health bar, `takeDamage()` |
+| `Block`    | Draggable/droppable physics block (plank, box, roof wedge), different sizes/masses                |
+| `RainDrop` | Falling/angled rain projectile; deactivates on hitting a block                                    |
+| `Debris`   | Heavy falling object; destroys blocks on impact                                                   |
 
 ### New Components
 
-| Component    | Description                                |
-| ------------ | ------------------------------------------ |
-| `HUD`        | Timer countdown + "creatures safe" counter |
-| `PhaseLabel` | Animated "BUILD!" / "STORM!" overlay       |
+| Component | Description                                |
+| --------- | ------------------------------------------ |
+| `HUD`     | Timer countdown + "creatures safe" counter |
 
 ### New Constants/Types
 
@@ -88,18 +87,18 @@ interface LevelConfig {
 
 - Extends `Phaser.Physics.Matter.Sprite`
 - Plays idle animation for its type
-- `soakedMeter`: 0–100 float, tracked per creature
-- `isExposed`: computed each frame — true if no block body covers the creature from above (raycasting or bounds check)
-- Each frame during storm: if `isExposed`, increment `soakedMeter` by rate (faster in wind, slower for rain only); if sheltered, decrement slowly
-- A small **soaked bar** rendered above the creature (Phaser `Graphics`, red fill on dark bg) updates each frame
-- At `soakedMeter >= 100`: play `enemy-death` spritesheet animation, disable physics body, mark `isDead = true`
-- Creature idle animation subtly changes as meter fills: normal idle → slower/hunched idle tint shift (blue tint applied via `setTint`)
+- `health`: 0–100 integer, starts at 100
+- `takeDamage()`: called by collision handler when a `RainDrop` hits; subtracts `HEALTH_HIT_AMOUNT` (12); triggers death at 0
+- A small **health bar** rendered above the creature (Phaser `Graphics`, green→orange→red fill on dark bg) — hidden at full health, shown when any damage taken
+- At `health <= 0`: play `enemy-death` spritesheet animation, disable physics body, mark `isDead = true`
+- Body labeled `'creature'` for collision detection
+- Tint shifts bluer as health decreases (visual feedback)
 
 ### 5. Create `Block` game object (`src/gameobjects/Block.ts`)
 
 - Extends `Phaser.Physics.Matter.Image`
-- During build phase: pointer drag via `setInteractive({ cursor: 'grab' })` + a `Matter.Constraint` that pins the body to the pointer position
-- On drop: destroy constraint, body falls and settles under gravity with rotation
+- During build phase: pointer drag via `setInteractive({ cursor: 'grab' })` + `setStatic(true)` while dragging, direct `Matter.Body.setPosition` on pointer move
+- On drop: `setStatic(false)`, body falls and settles under gravity with rotation
 - Three types: `Box` (swamp box sprites 1–6), `Stone` (swamp stone sprites, heavy/slow), `Plank` (swamp fence sprites, thin/long)
 - **Physics body shapes** (AI-traced per sprite, passed to `Matter.Bodies.fromVertices`):
   - `Box` variants: default rectangle (shape already matches bounds)
@@ -107,11 +106,10 @@ interface LevelConfig {
   - `Plank` variants: thin 4-point polygon matching the diagonal angle of each fence sprite
   - Vertex arrays defined in a `BLOCK_SHAPES` constant in `src/constants/`
 - **Drag feedback UX:**
-  - **Always (build phase)**: every draggable block renders a permanent colored `Graphics` outline (e.g. dashed yellow border); outline is destroyed when the storm phase begins
-  - `pointerover`: additionally apply white tint (`setTint(0xddddff)`), cursor → `grab`
-  - `pointerout`: clear tint, cursor → default; permanent outline remains
-  - Dragging: scale to 1.05×, outline brightens to solid white, cursor → `grabbing`
-  - On drop: scale back to 1×, outline returns to default yellow dashed style
+  - `pointerover`: apply blue tint (`setTint(0xddeeff)`), cursor → `grab`
+  - `pointerout`: clear tint, cursor → default
+  - Dragging: scale to 1.08×, cursor → `grabbing`
+  - On drop: scale back to 1×
 
 ### 6. Create `RainDrop` & `Debris` game objects (`src/gameobjects/Weather.ts`)
 
@@ -131,7 +129,7 @@ This is the core scene with two sub-phases:
 
 - Render swamp background parallax layers (`swamp/background/layers/1–5.png`)
 - Spawn creatures at fixed positions (per level config)
-- Render block palette on left edge; player drags blocks into scene
+- Spawn `blockCount` blocks randomly along the ground (x range 200–1100); player drags them to build shelter
 - Show HUD timer (if not tutorial)
 - "Launch Storm" button (or timer auto-triggers)
 
@@ -139,8 +137,7 @@ This is the core scene with two sub-phases:
 
 - Disable block dragging, enable full physics
 - **Background transition**: tween layer 1 sky tint from blue-grey → dark purple/charcoal (`0x2a1a3a`) over 2s; add a semi-transparent dark `Graphics` overlay that fades in
-- **Rain visual**: Phaser particle emitter using a procedurally generated 2×8px white-grey texture, emitted at ~70° angle in dense streams from the top edge
-- **Rain physics**: spawn `RainDrop` Matter bodies at intervals from top-right; destroyed on collision with any block (deflected by shelter); trigger `takeDamage()` on creature contact
+- **Rain**: spawn `RainDrop` sensor bodies (2×10px procedural texture, blue tint) at `rainIntervalMs` intervals from the top; destroyed on collision with any non-raindrop body; call `creature.takeDamage()` on collision with body labeled `'creature'`
 - **Wind**: apply `setForce` horizontally on exposed creature Matter bodies each frame; add horizontal white streak `Graphics` lines across scene for visual effect
 - **Debris** (level 3+): spawn stone sprites as high-mass Matter bodies falling from top, rotating on descent
 - Detect creature hits → mark creature as harmed
@@ -149,7 +146,6 @@ This is the core scene with two sub-phases:
 **Phase transition:**
 
 - Camera shake on storm start
-- `PhaseLabel` "STORM!" label flashes in then fades
 - Lightning flash: instantaneous white full-screen `Graphics` overlay at opacity 0.8, immediately tweened to 0 over 150ms; repeat 1–2 times
 
 ### 9. Add `Result` scene (`src/scenes/Result.tsx`)
@@ -158,10 +154,9 @@ This is the core scene with two sub-phases:
 - "Next Level" / "Retry" buttons
 - Save progress to `localStorage`
 
-### 10. Add `HUD` & `PhaseLabel` components (`src/components/`)
+### 10. Add `HUD` component (`src/components/`)
 
 - `HUD.tsx`: countdown timer text + creatures-safe counter
-- `PhaseLabel.tsx`: large centered label that fades in/out
 
 ### 11. Wire up scene index and update `src/index.ts`
 
@@ -201,5 +196,5 @@ This is the core scene with two sub-phases:
 - No audio in initial implementation
 - `localStorage` used only for highest completed level
 - Physics: **Matter.js** (replaces Arcade in `src/index.ts` config); enables block rotation, friction, stable stacking, and toppling
-- Drag-and-drop via `Phaser.Physics.Matter.MatterGameObject` pointer events + `Matter.Constraint` to follow the pointer during drag
+- Drag-and-drop via `Phaser.Physics.Matter.MatterGameObject` pointer events + `setStatic(true)` + direct `Matter.Body.setPosition` during drag
 - Creatures use Matter static bodies; rain/debris use Matter dynamic bodies

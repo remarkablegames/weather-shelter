@@ -3,9 +3,6 @@ import Phaser from 'phaser';
 import { BLOCK_SHAPES, Texture } from '../constants';
 import { BlockType } from '../types/level';
 
-const OUTLINE_COLOR_IDLE = 0xffdd00;
-const OUTLINE_COLOR_DRAG = 0xffffff;
-const OUTLINE_ALPHA = 0.9;
 const DRAG_SCALE = 1.08;
 
 const BOX_TEXTURES: Texture[] = [
@@ -43,7 +40,6 @@ export function randomBlockTexture(type: BlockType): Texture {
 export class Block extends Phaser.Physics.Matter.Image {
   isDragging = false;
 
-  private outline!: Phaser.GameObjects.Graphics;
   private baseScale: number;
 
   constructor(
@@ -72,11 +68,7 @@ export class Block extends Phaser.Physics.Matter.Image {
     this.setScale(scale);
     this.setDepth(7);
 
-    this.outline = scene.add.graphics();
-    this.outline.setDepth(8);
-
     this.setInteractive({ cursor: 'grab' });
-    this.drawOutline(OUTLINE_COLOR_IDLE);
 
     this.on(Phaser.Input.Events.POINTER_OVER, this.onPointerOver);
     this.on(Phaser.Input.Events.POINTER_OUT, this.onPointerOut);
@@ -105,7 +97,6 @@ export class Block extends Phaser.Physics.Matter.Image {
     this.setTint(0xffffff);
     this.setScale(this.baseScale * DRAG_SCALE);
     this.scene.input.setDefaultCursor('grabbing');
-    this.drawOutline(OUTLINE_COLOR_DRAG);
     this.setDepth(12);
     this.setStatic(true);
 
@@ -132,8 +123,6 @@ export class Block extends Phaser.Physics.Matter.Image {
     this.setScale(this.baseScale);
     this.setDepth(7);
     this.scene.input.setDefaultCursor('default');
-    this.drawOutline(OUTLINE_COLOR_IDLE);
-
     this.scene.input.off(Phaser.Input.Events.POINTER_MOVE, this.onPointerMove);
     this.scene.input.off(Phaser.Input.Events.POINTER_UP, this.endDrag);
   };
@@ -141,28 +130,10 @@ export class Block extends Phaser.Physics.Matter.Image {
   disableDrag() {
     this.endDrag();
     this.removeInteractive();
-    this.outline.clear();
     this.scene.input.setDefaultCursor('default');
   }
 
-  private drawOutline(color: number) {
-    this.outline.clear();
-    const w = this.displayWidth + 4;
-    const h = this.displayHeight + 4;
-    this.outline.lineStyle(2, color, OUTLINE_ALPHA);
-    this.outline.strokeRect(this.x - w / 2, this.y - h / 2, w, h);
-  }
-
-  update() {
-    if (this.outline.visible) {
-      this.drawOutline(
-        this.isDragging ? OUTLINE_COLOR_DRAG : OUTLINE_COLOR_IDLE,
-      );
-    }
-  }
-
   destroy(fromScene?: boolean) {
-    this.outline.destroy();
     super.destroy(fromScene);
   }
 }
