@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/logo.svg" alt="Weather Shelter">
+  <img src="public/logo.svg" width="200" alt="Weather Shelter">
 </p>
 
 # Weather Shelter
