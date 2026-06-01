@@ -13,6 +13,8 @@ Weather Shelter is a physics-based puzzle game where you construct shelters to p
 
 Play the game on:
 
+- [Wavedash](https://wavedash.com/games/weather-shelter)
+- [itch.io](https://remarkablegames.itch.io/weather-shelter)
 - [remarkablegames](https://remarkablegames.org/weather-shelter/)
 
 ## How to Play
