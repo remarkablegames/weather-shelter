@@ -115,6 +115,13 @@ export class Boot extends Phaser.Scene {
 
   create() {
     const params = new URLSearchParams(window.location.search);
+
+    // Check for cover art mode
+    if (params.has('cover')) {
+      this.scene.start(Scene.CoverArt);
+      return;
+    }
+
     const levelParam = Number(params.get('level'));
     const isValidLevel =
       Number.isInteger(levelParam) &&

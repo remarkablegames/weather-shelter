@@ -3,6 +3,7 @@ export enum Scene {
   Menu = 'Menu',
   Game = 'Game',
   Result = 'Result',
+  CoverArt = 'CoverArt',
 }
 
 export enum AudioKey {

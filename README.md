@@ -133,6 +133,22 @@ Start a specific level by appending `?level=<number>` to the URL (e.g., `?level=
 open http://localhost:5173/?level=2
 ```
 
+### Cover Art
+
+Generate cover art by opening the game with `?cover` query param:
+
+```sh
+open http://localhost:5173/?cover
+```
+
+To export the image, right-click the canvas and select "Save image as..." or use the browser console:
+
+```js
+game.canvas.toDataURL('image/png');
+```
+
+For best results as a square icon (e.g., 600x600), resize the game canvas in `src/index.ts` before capturing.
+
 ## License
 
 [MIT](LICENSE)
