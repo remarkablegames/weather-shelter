@@ -82,6 +82,7 @@ jobs:
           window-width: 1280
           window-height: 720
           icon-path: public/logo.svg
+          frontend-dist: ../dist
         env:
           APPLE_SIGNING_IDENTITY: '-'
 
