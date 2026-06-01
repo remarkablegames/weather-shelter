@@ -22,7 +22,7 @@ jobs:
         with:
           release-type: node
 
-  deploy:
+  itchio:
     needs: release
     if: ${{ needs.release.outputs.release_created }}
     runs-on: ${{ matrix.os }}
@@ -41,7 +41,7 @@ jobs:
           node-version-file: .nvmrc
 
       - name: Install dependencies
-        run: npm ci --prefer-offline
+        run: npm ci --prefer-offline --ignore-scripts
 
       - name: Build game
         shell: bash
@@ -106,3 +106,40 @@ jobs:
           gh release upload ${{ needs.release.outputs.tag_name }} $CHANNEL.zip
         env:
           GH_TOKEN: ${{ github.token }}
+
+  wavedash:
+    needs: release
+    if: ${{ needs.release.outputs.release_created }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Use Node.js
+        uses: actions/setup-node@v6
+        with:
+          cache: npm
+          node-version-file: .nvmrc
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --ignore-scripts
+
+      - name: Build game
+        run: WAVEDASH=true npm run bundle
+
+      - name: Install Wavedash CLI
+        run: curl -fsSL https://wavedash.com/cli/install.sh | sh
+
+      - name: Create wavedash.toml
+        run: |
+          cat > wavedash.toml << 'EOF'
+          game_id = "j972ep9ctq6fz00ksegpd0mxc187vqf0"
+          upload_dir = "./dist"
+          entrypoint = "index.html"
+          EOF
+
+      - name: Push build
+        run: wavedash build push -m "${{ needs.release.outputs.tag_name }}"
+        env:
+          WAVEDASH_TOKEN: ${{ secrets.WAVEDASH_TOKEN }}
