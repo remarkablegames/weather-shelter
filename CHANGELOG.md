@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/remarkablegames/weather-shelter/compare/v1.0.0...v1.0.1) (2026-06-01)
+
+
+### Continuous Integration
+
+* **github:** set frontend-dist for tauri-action in release-please.yml ([599c7ca](https://github.com/remarkablegames/weather-shelter/commit/599c7ca92caa7038465b206c05d20dc339906490))
+
 ## 1.0.0 (2026-06-01)
 
 
