@@ -13,6 +13,39 @@ Play the game on:
 
 - [remarkablegames](https://remarkablegames.org/weather-shelter/)
 
+## How to Play
+
+Protect animals from the storm by building shelters out of building materials before the weather strikes.
+
+### Build Phase
+
+- **Drag blocks** onto the animals to construct a shelter around them
+- Boxes, stones, and planks behave differently — experiment with stacking them
+- Level 1 has no timer; later levels give you a countdown before the storm starts
+- Click **Start Storm** when you're ready (or wait for the timer to run out)
+- Click **Restart** to restart the current level
+
+### Storm Phase
+
+- Rain falls and damages any animal it hits directly
+- Later levels add **wind** that pushes animals and blocks sideways
+- Level 3+ drops **debris** that can knock your shelter apart
+- Watch each animal's health bar — green is safe, red is critical
+- The storm ends on its own; survive it with all animals alive to win
+
+### Tips
+
+- Stack blocks above and around animals to block falling rain
+- Use **stones** to anchor structures against wind and debris
+- Lean **planks** as sloped roofs to deflect rain off to the sides
+
+### Win / Lose
+
+- **Win**: all animals survive the storm
+- **Lose**: any animal's health reaches 0
+
+Progress is saved so you can pick up from where you left off.
+
 ## Credits
 
 ### Art
