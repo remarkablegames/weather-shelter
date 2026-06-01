@@ -9,6 +9,8 @@
 
 ☂️ Build shelters before the storm arrives. Can your creations weather the storm?
 
+Weather Shelter is a physics-based puzzle game where you construct shelters to protect animals from the oncoming storm. Stack boxes, planks, and stones to create sturdy structures that can withstand rain, wind, and falling debris. Each level introduces new challenges and materials, testing your engineering skills and creativity.
+
 Play the game on:
 
 - [remarkablegames](https://remarkablegames.org/weather-shelter/)
