@@ -50,11 +50,11 @@ export class CoverArt extends Phaser.Scene {
     if (!isSquare) {
       const subtitle = this.add.text(
         width / 2,
-        subtitleY,
+        subtitleY + (height >= 720 ? 50 : 0),
         'Build. Protect. Survive.',
         {
           fontFamily: 'sans-serif',
-          fontSize: '28px',
+          fontSize: 30,
           color: '#cccccc',
         },
       );
