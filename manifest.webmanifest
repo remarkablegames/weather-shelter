@@ -1,0 +1,19 @@
+{
+  "name": "Weather Shelter",
+  "short_name": "Weather Shelter",
+  "description": "Build shelters before the storm arrives. Can your creations weather the storm?",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
+
